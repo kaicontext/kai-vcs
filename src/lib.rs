@@ -28,7 +28,7 @@ pub use tag::Tag;
 pub use tree::{EntryKind, Target, Tree, TreeEntry};
 
 pub mod view;
-pub use view::{DraftHeads, RefState, RetainedRoot, View, ViewRef, WorkspaceRoot};
+pub use view::{DraftHeads, PartitionedView, RefState, RetainedRoot, View, ViewRef, WorkspaceRoot};
 
 pub mod metadata;
 pub use metadata::{

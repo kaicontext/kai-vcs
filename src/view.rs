@@ -300,3 +300,138 @@ impl View {
         Ok(view)
     }
 }
+
+/// A type-6 view root whose entries are held by immutable inline submaps.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct PartitionedView {
+    pub namespace_generation: u64,
+    /// Strictly increasing bucket numbers; empty buckets are omitted.
+    pub submaps: Vec<(u8, ObjectId)>,
+}
+
+fn bucket(section: u8, key: &[u8]) -> u8 {
+    let mut hash = blake3::Hasher::new();
+    hash.update(b"KAI-VIEW-BUCKET\0");
+    hash.update(&[section]);
+    hash.update(key);
+    hash.finalize().as_bytes()[0]
+}
+fn pin_key(pin: &RetainedRoot) -> [u8; 34] {
+    let mut key = [0; 34];
+    key[..2].copy_from_slice(&pin.type_code.to_be_bytes());
+    key[2..].copy_from_slice(pin.id.digest());
+    key
+}
+impl View {
+    /// Deterministically partition a valid view. Each output submap is an ordinary
+    /// inline view with generation zero. No empty submaps are emitted.
+    pub fn partition(self) -> Result<(PartitionedView, Vec<View>), String> {
+        self.validate()?;
+        let mut parts = std::collections::BTreeMap::<u8, View>::new();
+        for r in self.refs {
+            parts
+                .entry(bucket(1, r.name.as_bytes()))
+                .or_default()
+                .refs
+                .push(r);
+        }
+        for d in self.drafts {
+            parts
+                .entry(bucket(2, &d.change_id))
+                .or_default()
+                .drafts
+                .push(d);
+        }
+        for w in self.workspaces {
+            parts
+                .entry(bucket(3, &w.workspace))
+                .or_default()
+                .workspaces
+                .push(w);
+        }
+        for p in self.retained {
+            parts
+                .entry(bucket(4, &pin_key(&p)))
+                .or_default()
+                .retained
+                .push(p);
+        }
+        let mut root = PartitionedView {
+            namespace_generation: self.namespace_generation,
+            submaps: Vec::new(),
+        };
+        let mut leaves = Vec::new();
+        for (bucket, view) in parts {
+            root.submaps.push((bucket, view.id()?));
+            leaves.push(view);
+        }
+        Ok((root, leaves))
+    }
+    // Compute once per object, not once per incoming root edge. Ordinary inline
+    // views need not satisfy the submap-only generation/partition restrictions.
+    pub(crate) fn submap_bucket(&self) -> Option<u8> {
+        if self.namespace_generation != 0 {
+            return None;
+        }
+        let mut keys = self
+            .refs
+            .iter()
+            .map(|r| bucket(1, r.name.as_bytes()))
+            .chain(self.drafts.iter().map(|d| bucket(2, &d.change_id)))
+            .chain(self.workspaces.iter().map(|w| bucket(3, &w.workspace)))
+            .chain(self.retained.iter().map(|p| bucket(4, &pin_key(p))));
+        let first = keys.next()?;
+        keys.all(|b| b == first).then_some(first)
+    }
+}
+impl PartitionedView {
+    pub fn id(&self) -> Result<ObjectId, String> {
+        Ok(ObjectId::hash(&self.encode()?))
+    }
+    pub fn encode(&self) -> Result<Vec<u8>, String> {
+        if self.submaps.len() > 256 || !self.submaps.windows(2).all(|w| w[0].0 < w[1].0) {
+            return Err("duplicate or unordered submap buckets".into());
+        }
+        let mut out = Vec::new();
+        codec::head(&mut out, 5, 3);
+        field(&mut out, 0);
+        field(&mut out, self.namespace_generation);
+        field(&mut out, 1);
+        codec::head(&mut out, 4, self.submaps.len() as u64);
+        for (bucket, id) in &self.submaps {
+            codec::head(&mut out, 4, 2);
+            field(&mut out, u64::from(*bucket));
+            codec::reference(&mut out, *id);
+        }
+        field(&mut out, 5);
+        field(&mut out, 1);
+        codec::bounded(out, 6)
+    }
+    pub fn decode(input: &[u8]) -> Result<Self, String> {
+        let (mut d, _) = decoder(input, 6, 3, 3)?;
+        d.expect(0, 0)?;
+        let namespace_generation = d.head(0)?;
+        d.expect(0, 1)?;
+        let count = d.count(4, 39)?;
+        if count > 256 {
+            return Err("too many submaps".into());
+        }
+        let mut submaps = Vec::new();
+        for _ in 0..count {
+            d.expect(4, 2)?;
+            let bucket = u8::try_from(d.head(0)?).map_err(|_| "submap bucket overflow")?;
+            submaps.push((bucket, d.reference()?));
+        }
+        d.expect(0, 5)?;
+        d.expect(0, 1)?;
+        d.finish()?;
+        let view = Self {
+            namespace_generation,
+            submaps,
+        };
+        if !view.submaps.windows(2).all(|w| w[0].0 < w[1].0) {
+            return Err("duplicate or unordered submap buckets".into());
+        }
+        Ok(view)
+    }
+}

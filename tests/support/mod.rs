@@ -194,6 +194,26 @@ pub fn sample(name: &str) -> Object {
             results: vec![id(0x55), id(0x66)],
             reason: b"unsupported inputs remain".to_vec(),
         })),
+        "view-partitioned-empty" => Object::PartitionedView(Box::default()),
+        "view-partitioned-boundaries" => Object::PartitionedView(Box::new(PartitionedView {
+            namespace_generation: u64::MAX,
+            submaps: vec![(0, id(0x11)), (255, id(0x22))],
+        })),
+        "view-submap" => Object::View(Box::new(View {
+            refs: vec![ViewRef {
+                name: "branches/main".into(),
+                generation: 1,
+                state: RefState::Deleted,
+            }],
+            ..View::default()
+        })),
+        "view-partitioned-single" => {
+            let Object::View(mut v) = sample("view-submap") else {
+                unreachable!()
+            };
+            v.namespace_generation = 7;
+            Object::PartitionedView(Box::new(v.partition().unwrap().0))
+        }
         "view-empty" => Object::View(Box::default()),
         "view-full" => Object::View(Box::new(View {
             namespace_generation: 24,

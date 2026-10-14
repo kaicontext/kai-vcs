@@ -29,6 +29,29 @@ fn fixed(v: &Value) -> Result<&[u8], String> {
     Ok(b)
 }
 pub(super) fn validate(v: &Value) -> Result<(), String> {
+    let header = map(v, &[0, 1, 5], &[2, 3, 4])?;
+    if uint(&header[&5])? == 1 {
+        let m = map(v, &[0, 1, 5], &[])?;
+        uint(&m[&0])?;
+        let entries = array(&m[&1])?;
+        if entries.len() > 256 {
+            return Err("too many submaps".into());
+        }
+        let mut last = None;
+        for entry in entries {
+            let pair = array(entry)?;
+            if pair.len() != 2 {
+                return Err("invalid submap pair".into());
+            }
+            let bucket = uint(&pair[0])?;
+            if bucket > 255 || last.is_some_and(|p| p >= bucket) {
+                return Err("invalid submap bucket ordering".into());
+            }
+            native(&pair[1])?;
+            last = Some(bucket);
+        }
+        return Ok(());
+    }
     let m = map(v, &[0, 1, 2, 3, 4, 5], &[])?;
     uint(&m[&0])?;
     if uint(&m[&5])? != 0 {
@@ -106,4 +129,43 @@ pub(super) fn validate(v: &Value) -> Result<(), String> {
         last = Some(key);
     }
     Ok(())
+}
+
+// Called only on schema-validated records. A normal inline view may fail these
+// additional constraints; that matters only when a root uses it as a submap.
+pub(super) fn submap_bucket(v: &Value) -> Result<Option<u8>, String> {
+    let Value::Map(m) = v else {
+        return Err("expected view map".into());
+    };
+    if uint(&m[&5])? != 0 || uint(&m[&0])? != 0 {
+        return Ok(None);
+    }
+    let mut result = None;
+    for section in 1..=4 {
+        for entry in array(&m[&section])? {
+            let mut h = blake3::Hasher::new();
+            h.update(b"KAI-VIEW-BUCKET\0");
+            h.update(&[section as u8]);
+            match section {
+                1 | 2 => {
+                    h.update(bytes(&array(entry)?[0])?);
+                }
+                3 => {
+                    h.update(bytes(&map(entry, &[0], &[1, 2])?[&0])?);
+                }
+                4 => {
+                    let p = array(entry)?;
+                    h.update(&(uint(&p[0])? as u16).to_be_bytes());
+                    h.update(bytes(&array(&p[1])?[2])?);
+                }
+                _ => unreachable!(),
+            }
+            let bucket = h.finalize().as_bytes()[0];
+            if result.is_some_and(|p| p != bucket) {
+                return Ok(None);
+            }
+            result = Some(bucket);
+        }
+    }
+    Ok(result)
 }

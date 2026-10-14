@@ -373,3 +373,115 @@ fn recovery_write_failures_never_report_success_and_leave_only_exact_prefixes() 
         assert_eq!(sink.bytes, &complete[..cut]);
     }
 }
+
+#[test]
+fn partitioned_view_backup_recovers_every_submap_and_source() {
+    let f = fixture::partitioned_fixture();
+    verify_package(
+        &Object::BackupManifest(Box::new(f.backup.clone())),
+        &[],
+        ClosureLimits::default(),
+        |id, _| f.store.get(&id).cloned().ok_or("missing".into()),
+    )
+    .unwrap();
+    let b = read(&f).unwrap();
+    let index = b.recovery_index().unwrap();
+    for text in [
+        "submap bucket=",
+        "state=0 targets=deleted",
+        "state=2 targets=",
+        "workspace 0202",
+        "draft change=",
+        "retained type=",
+    ] {
+        assert!(index.contains(text), "missing {text}");
+    }
+    let mut tar = Vec::new();
+    b.recovery().unwrap().write(&mut tar).unwrap();
+    let files = tar_files(&tar);
+    assert_eq!(files["repository.kai-bundle"], container(&f));
+    for (id, bytes) in &f.store {
+        assert_eq!(&files[&format!("objects/{}.object", id.hex())], bytes);
+    }
+    let restored = Bundle::read(files["repository.kai-bundle"].as_slice()).unwrap();
+    assert_eq!(restored.recovery_index().unwrap(), index);
+    assert!(restored.archive(&f.resolved.to_string()).is_ok());
+}
+#[test]
+fn both_package_readers_reject_invalid_submap_bindings_and_contents() {
+    for case in 0..9 {
+        let mut f = fixture::partitioned_fixture();
+        let Object::PartitionedView(mut root) = Object::decode(&f.store[&f.view]).unwrap() else {
+            panic!()
+        };
+        let (bucket, child) = root.submaps[0];
+        match case {
+            0 => {
+                f.store.remove(&child);
+            }
+            1 => {
+                root.submaps = vec![(bucket ^ 1, child)];
+            }
+            2 => {
+                root.submaps[0].1 = put(&mut f.store, Object::View(Box::default()));
+            }
+            3 => {
+                let Object::View(mut leaf) = Object::decode(&f.store[&child]).unwrap() else {
+                    panic!()
+                };
+                leaf.namespace_generation = 99;
+                root.submaps[0].1 = put(&mut f.store, Object::View(leaf));
+            }
+            4 => {
+                root.submaps[0].1 = put(&mut f.store, Object::PartitionedView(Box::default()));
+            }
+            5 => {
+                root.submaps[0].1 = f.resolved;
+            }
+            6..=8 => {
+                let Object::View(mut leaf) = Object::decode(&{
+                    let original = fixture::fixture();
+                    original.store[&original.view].clone()
+                })
+                .unwrap() else {
+                    panic!()
+                };
+                if case == 6 {
+                    leaf.drafts[0].change_id = [99; 16];
+                }
+                if case == 7 {
+                    leaf.workspaces[0].workspace = [99; 16];
+                }
+                if case == 8 {
+                    leaf.refs[1].state = RefState::Target(f.checkpoint);
+                }
+                let (new_root, children) = leaf.partition().unwrap();
+                root = Box::new(new_root);
+                for leaf in children {
+                    put(&mut f.store, Object::View(Box::new(leaf)));
+                }
+            }
+            _ => unreachable!(),
+        }
+        f.view = put(&mut f.store, Object::PartitionedView(root));
+        f.backup.current_view = f.view;
+        let op_id = f.backup.current_operation.unwrap();
+        let Object::Operation(mut op) = Object::decode(&f.store[&op_id]).unwrap() else {
+            panic!()
+        };
+        op.post_view = f.view;
+        f.backup.current_operation = Some(put(&mut f.store, Object::Operation(op)));
+        f.backup.contents.inventory = inventory(&f.store);
+        assert!(
+            verify_package(
+                &Object::BackupManifest(Box::new(f.backup.clone())),
+                &[],
+                ClosureLimits::default(),
+                |id, _| f.store.get(&id).cloned().ok_or("missing".into())
+            )
+            .is_err(),
+            "production case {case}"
+        );
+        assert!(read(&f).is_err(), "independent case {case}");
+    }
+}

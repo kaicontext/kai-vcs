@@ -85,7 +85,7 @@ def drill(report):
         report['passed'].append(name)
         print('PASS:', name, flush=True)
 
-    for name in ('repository', 'source'):
+    for name in ('repository', 'source', 'submaps'):
         begin('repository-recovery', name)
         original = (artifacts / f'{name}.kai-bundle').read_bytes()
         copied = work / f'{name}.kai-bundle'
@@ -101,13 +101,15 @@ def drill(report):
         objects = [p.read_bytes() for p in (restored / 'objects').iterdir()]
         require(sorted(objects) == sorted(frames(original)[1:]), 'missing/changed/extra recovered object')
         require(run(restored / 'repository.kai-bundle', '--index').stdout == index, 'index changed after recovery')
-        if name == 'repository':
+        if name == 'submaps':
+            require('submap bucket=' in index, 'submap root missing')
+        if name in ('repository', 'submaps'):
             for text in ('state=0 targets=deleted', 'state=2 targets=', 'working-conflict', 'state 0 absent', 'included=false'):
                 require(text in index, 'repository state missing: ' + text)
-            snapshot = work / 'resolved.tar'
+            snapshot = work / (name + '-resolved.tar')
             run(restored / 'repository.kai-bundle', '--archive', expected['repository_ids']['Resolved revision'], snapshot)
-            extract(snapshot, work / 'resolved')
-            require((work / 'resolved/file').read_bytes() == b'saved source\n', 'resolved source changed')
+            extract(snapshot, work / (name + '-resolved'))
+            require((work / (name + '-resolved') / 'file').read_bytes() == b'saved source\n', 'resolved source changed')
             for label in ('Unresolved revision', 'Checkpoint'):
                 bad = work / 'unresolved.tar'
                 run(restored / 'repository.kai-bundle', '--archive', expected['repository_ids'][label], bad, success=False)
