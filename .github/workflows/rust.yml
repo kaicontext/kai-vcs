@@ -5,6 +5,7 @@ permissions:
 jobs:
   test:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
@@ -23,6 +24,7 @@ jobs:
           python tools/interface-reference/check.py
           python tools/interface-reference/profiles.py
           python tools/interface-reference/frontier.py
+          python -m unittest discover -s tools/qualification -p "test_*.py"
       - name: Reproduce independent golden vectors
         shell: bash
         run: |
@@ -40,6 +42,7 @@ jobs:
           if [ "$RUNNER_OS" = "Windows" ]; then suffix=".exe"; fi
           python tools/qualification/faults.py --child "target/debug/kai-fault-child$suffix" --reader "target/debug/kai-bundle-reader$suffix" --bundle acceptance-fixtures/F03/state-a.kai-bundle --report fault-report.json
       - name: Preserve fixture and fault evidence
+        if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: fixture-fault-evidence-${{ matrix.os }}

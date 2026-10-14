@@ -32,7 +32,7 @@ def frontier(v):
         hx(r['replica_hex'], 32)
         assert r['replica_hex'] > last
         last = r['replica_hex']
-        assert r['operations_digest'].startswith('b3:')
+        assert isinstance(r['operations_digest'], str) and r['operations_digest'].startswith('b3:')
         hx(r['operations_digest'][3:], 64)
         result[last] = count(r['sequence'])
     return result
@@ -75,6 +75,7 @@ def validate(text):
             native(e['target'])
         else:
             assert e['kind'] == 5
+            assert isinstance(e['target'], str)
             algorithm, digest = e['target'].split(':')
             assert algorithm in ('sha1', 'sha256')
             hx(digest, 40 if algorithm == 'sha1' else 64)

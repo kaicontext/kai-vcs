@@ -68,7 +68,11 @@ remain unchanged. Only the after-response boundary may have emitted `DONE`.
 The small F03 state-A bundle currently exercises 50 boundaries.
 
 Reports include platform, source commit, binary/input hashes, seed, elapsed time,
-and per-boundary assertions. CI retains the manifest and report per platform.
+and per-boundary assertions. Reports record pass/fail status; failures preserve
+completed boundaries, the failing stage/boundary, and error details before the
+harness exits unsuccessfully. A supplied `GITHUB_SHA` avoids invoking Git; without
+it, unavailable Git metadata is recorded as null. CI uploads available evidence
+even on failure and lets the other platform jobs finish.
 The tests use temporary directories and delete successful outputs. Reports identify
 the host OS but do not certify any particular filesystem or mount configuration.
 

@@ -88,5 +88,80 @@
     "name": "reordered fields",
     "json": "{\"entries\":[{\"path_hex\":\"ff\",\"kind\":1,\"target\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}]}],\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}],\"protocol_hex\":\"ff\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"generation\":\"18446744073709551615\",\"epoch_hex\":\"03030303030303030303030303030303\",\"workspace_hex\":\"02020202020202020202020202020202\",\"schema_version\":1}",
     "valid": false
+  },
+  {
+    "name": "namespace digest rejects integer",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":7}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":1,\"target\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}]}]}",
+    "valid": false
+  },
+  {
+    "name": "namespace digest rejects null",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":null}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":1,\"target\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}]}]}",
+    "valid": false
+  },
+  {
+    "name": "namespace digest rejects array",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":[]}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":1,\"target\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}]}]}",
+    "valid": false
+  },
+  {
+    "name": "namespace digest rejects object",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":{}}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":1,\"target\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}]}]}",
+    "valid": false
+  },
+  {
+    "name": "namespace digest rejects boolean",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":true}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":1,\"target\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}]}]}",
+    "valid": false
+  },
+  {
+    "name": "entry digest rejects integer",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":1,\"target\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":7}]}]}",
+    "valid": false
+  },
+  {
+    "name": "entry digest rejects null",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":1,\"target\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":null}]}]}",
+    "valid": false
+  },
+  {
+    "name": "entry digest rejects array",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":1,\"target\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":[]}]}]}",
+    "valid": false
+  },
+  {
+    "name": "entry digest rejects object",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":1,\"target\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":{}}]}]}",
+    "valid": false
+  },
+  {
+    "name": "entry digest rejects boolean",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":1,\"target\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":true}]}]}",
+    "valid": false
+  },
+  {
+    "name": "gitlink target rejects integer",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":5,\"target\":7,\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}]}]}",
+    "valid": false
+  },
+  {
+    "name": "gitlink target rejects null",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":5,\"target\":null,\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}]}]}",
+    "valid": false
+  },
+  {
+    "name": "gitlink target rejects array",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":5,\"target\":[],\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}]}]}",
+    "valid": false
+  },
+  {
+    "name": "gitlink target rejects object",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":5,\"target\":{},\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}]}]}",
+    "valid": false
+  },
+  {
+    "name": "gitlink target rejects boolean",
+    "json": "{\"schema_version\":1,\"workspace_hex\":\"02020202020202020202020202020202\",\"epoch_hex\":\"03030303030303030303030303030303\",\"generation\":\"18446744073709551615\",\"tree\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"protocol_hex\":\"ff\",\"namespace\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}],\"entries\":[{\"path_hex\":\"ff\",\"kind\":5,\"target\":true,\"frontier\":[{\"replica_hex\":\"01010101010101010101010101010101\",\"sequence\":\"18446744073709551615\",\"operations_digest\":\"b3:abababababababababababababababababababababababababababababababab\"}]}]}",
+    "valid": false
   }
 ]
