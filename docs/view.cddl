@@ -1,0 +1,7 @@
+; Load alongside schemas.cddl. Ordering and semantic constraints: VIEW-FORMAT.md.
+view = {0: uint, 1: [* view-ref], 2: [* view-draft],
+        3: [* view-workspace], 4: [* view-pin], 5: 0}
+view-ref = [bstr, uint, ([0] / [1, native] / [2, [2* native]])]
+view-draft = [bstr .size 16, [1* native]]
+view-workspace = {0: bstr .size 16, ?1: native, ?2: native}
+view-pin = [1..19, native]

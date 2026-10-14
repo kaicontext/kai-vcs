@@ -1,0 +1,16 @@
+[package]
+name = "kai-object-reference"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+description = "Independent reader for the implemented Kai P0 object schemas"
+
+[dependencies]
+blake3 = "1"
+sha1 = "0.10"
+sha2 = "0.10"
+unicode-normalization = "0.1.24"
+
+[[bin]]
+name = "kai-object-reader"
+path = "src/main.rs"

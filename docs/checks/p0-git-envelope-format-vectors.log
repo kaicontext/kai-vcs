@@ -1,0 +1,7 @@
+Local verification completed 2026-10-14.
+cargo fmt --all -- --check: exit 0
+Independent object vector generator and comparison: exit 0
+Independent signing payload generator and comparison: exit 0
+git diff --check: exit 0
+Prior 20 vectors unchanged: SHA256 0e7d64ec9f3c4889b4f6333258b85827baaf6990290b2db9359708f38fc4d657
+Upstream Git: 2.50.1 (Apple Git-155); both algorithms, all four object kinds checked.

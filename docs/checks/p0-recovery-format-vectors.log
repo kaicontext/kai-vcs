@@ -1,0 +1,6 @@
+Exit code: 0
+    Blocking waiting for file lock on build directory
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running `target/debug/examples/vectors`
+Original nine vectors unchanged; current fixture SHA256: 8c13ff1bdb18ef7fd243679373942a8cb914f7f83c9e38ed21dd245333cf751b
+

@@ -1,0 +1,2 @@
+; Load alongside schemas.cddl. Semantics: GIT-ENVELOPE-FORMAT.md.
+git-envelope = {0: 1..4, 1: git-sha1 / git-sha256, 2: bstr}

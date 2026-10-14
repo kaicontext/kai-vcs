@@ -1,0 +1,3 @@
+Local verification completed 2026-10-14.
+Formatting, independent object/signing vector reproduction and comparisons, git diff --check: exit 0.
+Prior 32 object vectors unchanged: SHA256 ecd3ef4f800f42e33a3038cb35fdf6e57546320cb0e6ae8b080edd83fba8ad39

@@ -1,0 +1,23 @@
+; Imports native, identity from schemas.cddl. Semantic constraints are in RECOVERY-FORMAT.md.
+state = [0] / [1, 1..5, native / git-sha1 / git-sha256]
+conflict-version = {0: bstr, 1: [* state], ?2: native}
+conflict = {
+  0: 1..9, 1: [+ bstr], 2: [* conflict-version], 3: [2* conflict-version],
+  4: bstr, 5: bstr, ?6: [+ [bstr .size 16, bstr, bstr]], ?7: [+ native]
+}
+conflict-manifest = [+ [bstr, native]]
+checkpoint = {
+  0: bstr .size 16, 1: native, 2: native, 3: 1..2, 4: identity,
+  5: [* [bstr, 1..2]], ?6: native, ?7: conflict-manifest, ?8: native,
+  ?9: native, ?10: conflict-manifest
+}
+operation = {
+  0: bstr .size 16, 1: [* native], 2: native, 3: native, 4: bstr,
+  5: identity, 6: int, 7: int, 8: [* bstr .size 16], 9: bstr .size 16,
+  ?10: [+ bstr]
+}
+tag = {0: native, 1: bstr, 2: identity, ?3: native}
+change-event = {
+  0: 1..7, 1: [+ bstr .size 16], 2: [* native], 3: [* native],
+  4: identity, 5: bstr, ?6: native
+}

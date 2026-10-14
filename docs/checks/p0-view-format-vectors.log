@@ -1,0 +1,6 @@
+Local verification completed 2026-10-14.
+cargo fmt --all -- --check: exit 0
+cargo run --locked --offline -p kai-object-reference --example vectors: exit 0
+cmp tests/fixtures/objects.tsv /private/tmp/kai-view-vectors-check.tsv: exit 0
+git diff --check: exit 0
+Prior 15 fixture vectors: SHA256 unchanged, 8c13ff1bdb18ef7fd243679373942a8cb914f7f83c9e38ed21dd245333cf751b
