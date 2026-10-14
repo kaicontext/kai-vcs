@@ -5,3 +5,4 @@ tools/fixtures/corpus/* -text
 tests/fixtures/objects.tsv linguist-generated=true
 tests/fixtures/attestation-payloads.tsv linguist-generated=true
 tests/fixtures/acceptance/manifest.json linguist-generated=true
+tests/fixtures/transfer-frames.tsv linguist-generated=true

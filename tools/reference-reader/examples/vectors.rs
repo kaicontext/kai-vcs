@@ -646,12 +646,28 @@ fn main() {
             ])),
         },
     ));
+    let frames = std::env::args().any(|arg| arg == "--transfer-frames");
     let signing = std::env::args().any(|arg| arg == "--signing-payloads");
-    if !signing {
+    if frames {
+        println!("# name\tframe_hex");
+    } else if !signing {
         println!("# name\tframed_hex\tobject_id");
     }
     for (name, record) in vectors {
         let bytes = encode(&record).expect("valid fixture");
+        if frames {
+            if matches!(
+                name,
+                "blob-empty" | "tree-mixed" | "view-partitioned-single" | "revision-root"
+            ) {
+                let frame =
+                    kai_object_reference::transfer::encode_frame(&bytes, Default::default())
+                        .unwrap();
+                let hex: String = frame.iter().map(|b| format!("{b:02x}")).collect();
+                println!("{name}\t{hex}");
+            }
+            continue;
+        }
         if signing {
             if record.kind == 10 {
                 let payload = kai_object_reference::attestation_signing_payload(&bytes).unwrap();

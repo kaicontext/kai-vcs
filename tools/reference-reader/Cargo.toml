@@ -18,3 +18,7 @@ path = "src/main.rs"
 [[bin]]
 name = "kai-bundle-reader"
 path = "src/bundle_main.rs"
+
+[[bin]]
+name = "kai-transfer-reader"
+path = "src/transfer_main.rs"
