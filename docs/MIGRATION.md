@@ -82,6 +82,11 @@ from the review tree and remain available in earlier Git commits.
 
 ## Next P0 work
 
+The [P0 exit audit](P0-EXIT-AUDIT.md) maps each deliverable to evidence and
+separates vector/model results from later runtime acceptance. The
+[authority/licensing decision review](decisions/P0-AUTHORITY-LICENSING.md)
+records the implementation choice; independent approval remains pending.
+
 1. Review capability/outcome contracts against storage and transport needs;
    define remaining versioned request/session framing.
 2. Review evidence/frontier completeness, protocol binding, applicability and
