@@ -42,8 +42,9 @@ gates. This is an experimental preservation kernel, not a replacement CLI yet.
 The reader has **no dependency on the production crate**. It can inspect an
 individual canonical object and extract raw blob/chunk bytes. The new
 `kai-bundle-reader` independently verifies bounded standalone source-history
-bundles and exports selected resolved snapshots as tar archives. Full repository
-metadata/backup extraction and clean-host T012 qualification remain open. See
+bundles and exports resolved snapshots as tar archives. It also recovers complete
+portable backup state, including refs, workspaces, conflicts and metadata. Live
+database installation and clean-host T012 qualification remain open. See
 [BUNDLE-FORMAT.md](docs/BUNDLE-FORMAT.md) for supported types and limits.
 
 ```sh
@@ -96,9 +97,30 @@ ls -l "$demo_dir/restored"
 The restored example has `hello.txt`, executable `run.sh`, `data/bytes.bin`, and
 `hello-link` pointing to `hello.txt`. Archive export runs no saved scripts or hooks.
 Restoration requires a tar tool/filesystem capable of the saved kinds and names.
-Gitlinks, conflicted revisions, incremental bundles and unsupported interpreted
-metadata are explicit refusals in this reader version. This is source export,
-not repository initialization or a durable backup service.
+Gitlinks and conflicted snapshots refuse source export. Their native objects can
+be recovered intact with `--recover`; incremental bundles remain unsupported.
+This is portable recovery, not live repository initialization or durable backup.
+
+## Try repository recovery
+
+This second synthetic fixture includes branches, divergent drafts, a deleted ref,
+a workspace checkpoint, staged content, a delete/modify conflict and recovery
+pointers. It is validated by both the production and independent implementations.
+
+```sh
+recovery_dir=$(mktemp -d)
+cargo run --locked --offline --example repository_bundle -- "$recovery_dir/repository.kai-bundle"
+cargo run --locked --offline -p kai-object-reference --bin kai-bundle-reader -- "$recovery_dir/repository.kai-bundle" --index
+cargo run --locked --offline -p kai-object-reference --bin kai-bundle-reader -- "$recovery_dir/repository.kai-bundle" --recover "$recovery_dir/recovery.tar"
+mkdir "$recovery_dir/recovered"
+tar -xf "$recovery_dir/recovery.tar" -C "$recovery_dir/recovered"
+```
+
+The recovered directory contains the exact manifest, every inventoried object,
+a readable `INDEX.txt`, and a byte-identical bundle. Use the example's resolved
+revision ID with `--archive ID OUTPUT.tar` to export that snapshot. Unresolved
+revisions/checkpoints preserve all alternatives but refuse plain source export.
+See [recovery export](docs/RECOVERY-EXPORT.md) for bounds and authority semantics.
 
 ## Compatibility
 
@@ -121,7 +143,7 @@ in the adapter required by the specification.
 ## Current limits
 
 P0 is **open**. All 19 object types have draft codecs. Embedded manifest profiles,
-capability/outcome schemas, complete extraction, platform fault interfaces,
+capability/outcome review, clean-host extraction qualification, platform fault interfaces,
 full fixture generators, and independent reviewer approval are still required.
 There is no durable object store, metadata transaction, commit, checkout, remote,
 or migration authority in this increment. Pure object verification does not

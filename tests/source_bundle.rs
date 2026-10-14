@@ -384,7 +384,7 @@ fn capable_tar_restores_raw_long_names_bytes_modes_and_symlink_targets() {
 }
 
 #[test]
-fn resource_and_unsupported_source_refusals_are_explicit() {
+fn resource_limits_and_supported_policy_metadata_are_explicit() {
     let (mut s, root) = setup();
     let mut m = package(&s, root);
     let op = put(&mut s, support_object());
@@ -395,12 +395,7 @@ fn resource_and_unsupported_source_refusals_are_explicit() {
         interpretation: Interpretation::Interpreted,
     });
     m.contents.inventory.sort_by_key(|e| e.id);
-    assert!(
-        Bundle::read(container(&m, &s).as_slice())
-            .err()
-            .unwrap()
-            .contains("unsupported")
-    );
+    assert!(Bundle::read(container(&m, &s).as_slice()).is_ok());
     let cid = put(&mut s, Object::Chunk(vec![1]));
     let large = put(
         &mut s,

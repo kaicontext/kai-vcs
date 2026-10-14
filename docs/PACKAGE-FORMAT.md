@@ -69,8 +69,9 @@ lease can establish that it was actually committed. No newest-timestamp recovery
 all object bytes, declared features, required closure, and backup linkage pass.
 Neither is a durable-backup acknowledgment, full Git-mapping validation or external
 payload completeness claim. The draft [source bundle container](BUNDLE-FORMAT.md)
-now supports bounded independent source verification and tar export. Full backup
-containers, server authorization/configuration, encryption-key recovery, resumable
+now supports bounded independent verification, source tar export and portable
+[repository recovery](RECOVERY-EXPORT.md). Live database installation, server
+authorization/configuration, encryption-key recovery, resumable
 transport, durable leases, restore writes, and clean-host qualification remain
 subsequent work. A decoded standalone
 claim alone must never be displayed as a verified complete backup.

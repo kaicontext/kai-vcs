@@ -372,6 +372,41 @@ be exported as ordinary filesystem tar snapshots. Source export is not repositor
 restore, durable backup, or race-resistant checkout. P0 and clean-host T012 remain
 open; tests are local and remote CI has not been checked.
 
+## Independent repository recovery increment — 2026-10-14
+
+Extended the independent bundle reader to type-16 backup roots and all 19
+registered interpreted object types. Required closure now includes views, drafts,
+workspaces, checkpoints, conflict alternatives and advisory metadata. Cross-object
+checks cover draft/change IDs, workspace/checkpoint/barrier identity, evidence
+source state, complete conflict path bindings and backup operation post-view.
+Retained archival pointers may expire; included objects are never silently dropped.
+
+`--index` describes refs (including tombstones/divergence), drafts, workspace and
+staged state, conflicts and recovery pointers. `--recover` emits a safe-path tar
+containing original manifest/objects, a derived index and byte-identical bundle.
+Resolved checkpoint/revision snapshots export independently. Unresolved source
+export is refused while its exact alternatives remain recoverable.
+
+- **139 Rust tests passed locally**, including nine repository recovery tests and
+  extended CLI recovery/index/no-overwrite/corruption checks.
+- Workspace Clippy (warnings denied), formatting and whitespace checks passed.
+- The synthetic backup passed production package verification and independent
+  recovery. An isolated-directory drill copied only the reader executable and
+  bundle, reset HOME/PATH, removed original input copies, then restored and
+  compared the manifest and every object. The recovered bundle and index matched
+  exactly; resolved source exported and unresolved source refused before writes.
+- Evidence: `checks/p0-repository-recovery-tests.log`,
+  `checks/p0-repository-recovery-clippy.log`,
+  `checks/p0-repository-recovery-drill.log`,
+  `checks/p0-repository-recovery-sources.sha256`.
+
+This recovers portable immutable repository state, not an installed P1 database
+or editable workspace. No operation replay, root publication, policy trust or
+signature authentication occurs. Full clean-host/platform T012 qualification,
+fixture/fault harnesses and independent review remain open. The local isolated
+Mac drill is not a substitute for those acceptance gates. New work is local;
+the preceding source reader and ASCII demo were pushed as `2113f88`.
+
 ## Next P0 work
 
 1. Review the proposed capability/outcome contracts against storage and transport
@@ -379,8 +414,8 @@ open; tests are local and remote CI has not been checked.
 2. Review evidence/frontier profile completeness and protocol binding, evidence
    applicability and signed-payload interoperability. Resolve remaining
    size/streaming and submap choices before freeze.
-3. Extend independent extraction from source-history bundles to full repository
-   metadata/backup roots and conflicted-state preservation; qualify clean-host T012.
+3. Qualify independent repository recovery on clean hosts/platforms (T012), with
+   broader fixture coverage and failure cases before declaring the gate complete.
 4. Add F01–F07 generators with byte/kind manifests and deterministic seeds.
 5. Define fault-injection/platform interfaces and record ADR review for the native
    authority boundary and MIT preservation-kernel licensing.

@@ -5,14 +5,14 @@ use std::io::{Read, Write};
 use unicode_normalization::UnicodeNormalization;
 const INPUT_LIMIT: u64 = 256 * 1024 * 1024;
 const EDGE_LIMIT: usize = 1_000_000;
-type Digest = [u8; 32];
-fn digest(v: &Value) -> Result<Digest, String> {
+pub(super) type Digest = [u8; 32];
+pub(super) fn digest(v: &Value) -> Result<Digest, String> {
     native(v)?;
     bytes(&array(v)?[2])?
         .try_into()
         .map_err(|_| "invalid digest".into())
 }
-fn fields(r: &Record) -> Result<&BTreeMap<u64, Value>, String> {
+pub(super) fn fields(r: &Record) -> Result<&BTreeMap<u64, Value>, String> {
     match &r.payload {
         Payload::Structured(Value::Map(m)) => Ok(m),
         _ => Err("expected map".into()),
@@ -44,7 +44,10 @@ fn envelope(b: &[u8], ty: u16) -> Result<(), String> {
     Ok(())
 }
 pub struct Bundle {
-    records: BTreeMap<Digest, Record>,
+    pub(super) records: BTreeMap<Digest, Record>,
+    pub(super) objects: BTreeMap<Digest, Vec<u8>>,
+    pub(super) manifest: Record,
+    pub(super) manifest_bytes: Vec<u8>,
     roots: BTreeMap<Digest, u16>,
 }
 impl Bundle {
@@ -61,11 +64,13 @@ impl Bundle {
         if take(&mut cursor, 13)? != b"KAI-BUNDLE\0\0\x01" {
             return Err("invalid bundle signature/version".into());
         }
-        let manifest = decode(framed(&mut cursor)?)?;
-        if manifest.kind != 19 {
-            return Err("source reader requires transfer manifest".into());
+        let manifest_bytes = framed(&mut cursor)?.to_vec();
+        let manifest = decode(&manifest_bytes)?;
+        if !matches!(manifest.kind, 16 | 19) {
+            return Err("expected backup or transfer manifest".into());
         }
-        let m = map(&fields(&manifest)?[&1], &[0, 1, 2, 3, 4, 5, 6], &[])?;
+        let key = if manifest.kind == 16 { 4 } else { 1 };
+        let m = map(&fields(&manifest)?[&key], &[0, 1, 2, 3, 4, 5, 6], &[])?;
         if uint(&m[&0])? != 1 || !array(&m[&3])?.is_empty() {
             return Err("incremental bundle is not standalone".into());
         }
@@ -77,6 +82,7 @@ impl Bundle {
             return Err("bundle object count limit".into());
         }
         let mut records = BTreeMap::new();
+        let mut objects = BTreeMap::new();
         for entry in inventory {
             let e = array(entry)?;
             let id = digest(&e[0])?;
@@ -87,11 +93,9 @@ impl Bundle {
             }
             envelope(b, ty)?;
             if uint(&e[3])? == 1 {
-                if !matches!(ty, 1 | 2 | 3 | 12 | 13 | 14 | 15) {
-                    return Err(format!("unsupported interpreted source type {ty}"));
-                }
                 records.insert(id, decode(b)?);
             }
+            objects.insert(id, b.to_vec());
         }
         if !cursor.is_empty() {
             return Err("trailing bundle bytes".into());
@@ -100,16 +104,26 @@ impl Bundle {
         for r in array(&m[&1])? {
             let r = array(r)?;
             let ty = uint(&r[1])? as u16;
-            if !matches!(ty, 2 | 3 | 15) {
-                return Err("source root must be tree, revision or tag".into());
-            }
             roots.insert(digest(&r[0])?, ty);
         }
-        let bundle = Self { records, roots };
+        if manifest.kind == 16 {
+            let top = fields(&manifest)?;
+            roots.insert(digest(&top[&2])?, 6);
+            if let Some(op) = top.get(&3) {
+                roots.insert(digest(op)?, 7);
+            }
+        }
+        let bundle = Self {
+            records,
+            roots,
+            objects,
+            manifest,
+            manifest_bytes,
+        };
         bundle.verify()?;
         Ok(bundle)
     }
-    fn get(&self, id: Digest, kinds: &[u16]) -> Result<&Record, String> {
+    pub(super) fn get(&self, id: Digest, kinds: &[u16]) -> Result<&Record, String> {
         let r = self
             .records
             .get(&id)
@@ -151,8 +165,13 @@ impl Bundle {
             }
             3 => {
                 let m = fields(r)?;
-                if m.contains_key(&8) {
-                    return Err("unresolved revision cannot be source-exported".into());
+                if m.contains_key(&8) && m.contains_key(&7) {
+                    return Err("conflicted revision cannot carry Git envelope".into());
+                }
+                if let Some(v) = m.get(&8) {
+                    for p in array(v)? {
+                        add(&array(p)?[1], &[5])?;
+                    }
                 }
                 add(&m[&0], &[2])?;
                 for p in array(&m[&1])? {
@@ -176,7 +195,7 @@ impl Bundle {
                     add(c, &[13])?;
                 }
             }
-            _ => {}
+            _ => edges.extend(self.repository_edges(r)?),
         }
         Ok(edges)
     }
@@ -229,6 +248,7 @@ impl Bundle {
                 }
             }
         }
+        self.verify_repository_bindings(&mut work)?;
         Ok(())
     }
     pub fn roots(&self) -> Vec<String> {
@@ -264,7 +284,7 @@ impl Bundle {
         Ok(length)
     }
 }
-fn hex(b: &[u8]) -> String {
+pub(super) fn hex(b: &[u8]) -> String {
     b.iter().map(|b| format!("{b:02x}")).collect()
 }
 struct ExportEntry {
@@ -307,18 +327,31 @@ fn alias(name: &[u8]) -> Result<Vec<u8>, String> {
 impl Bundle {
     pub fn archive(&self, root: &str) -> Result<Archive<'_>, String> {
         let id = *self
-            .roots
+            .records
             .keys()
             .find(|id| format!("k1:b3:{}", hex(*id)) == root)
-            .ok_or("root is not selected by bundle")?;
+            .ok_or("snapshot is not an interpreted inventory object")?;
         let mut r = &self.records[&id];
         if r.kind == 15 {
             r = self.get(digest(&fields(r)?[&0])?, &[3])?;
         }
-        let tree = if r.kind == 3 {
-            digest(&fields(r)?[&0])?
-        } else {
-            id
+        let tree = match r.kind {
+            3 => {
+                let m = fields(r)?;
+                if m.contains_key(&8) {
+                    return Err("unresolved revision cannot be source-exported".into());
+                }
+                digest(&m[&0])?
+            }
+            8 => {
+                let m = fields(r)?;
+                if m.contains_key(&7) || m.contains_key(&10) {
+                    return Err("unresolved checkpoint cannot be source-exported".into());
+                }
+                digest(&m[&1])?
+            }
+            2 => id,
+            _ => return Err("archive requires tree, revision, tag or checkpoint".into()),
         };
         let mut stack = vec![(tree, Vec::<u8>::new(), 0usize)];
         let mut entries = Vec::new();
@@ -406,7 +439,7 @@ fn octal(dst: &mut [u8], n: u64) -> Result<(), String> {
     dst[..s.len()].copy_from_slice(s.as_bytes());
     Ok(())
 }
-fn header(
+pub(super) fn header(
     out: &mut impl Write,
     path: &[u8],
     mode: u64,
@@ -433,7 +466,7 @@ fn header(
     h[155] = b' ';
     out.write_all(&h).map_err(|e| e.to_string())
 }
-fn pad(out: &mut impl Write, n: u64) -> Result<(), String> {
+pub(super) fn pad(out: &mut impl Write, n: u64) -> Result<(), String> {
     out.write_all(&[0u8; 512][..((512 - n % 512) % 512) as usize])
         .map_err(|e| e.to_string())
 }

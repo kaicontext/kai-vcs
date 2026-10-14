@@ -100,6 +100,32 @@ fn cli_verifies_exports_refuses_overwrite_and_corruption_before_output() {
     assert_eq!(&archive[512..522], b"exact\0\xff\r\n\0");
     assert!(!run().status.success());
     assert_eq!(fs::read(&output).unwrap(), archive);
+    let recovery = dir.join("recovery.tar");
+    let recover = || {
+        Command::new(env!("CARGO_BIN_EXE_kai-bundle-reader"))
+            .arg(&input)
+            .arg("--recover")
+            .arg(&recovery)
+            .output()
+            .unwrap()
+    };
+    assert!(recover().status.success());
+    let recovered = fs::read(&recovery).unwrap();
+    assert!(recovered.windows(data.len()).any(|b| b == data));
+    assert!(!recover().status.success());
+    assert_eq!(fs::read(&recovery).unwrap(), recovered);
+    let index = Command::new(env!("CARGO_BIN_EXE_kai-bundle-reader"))
+        .arg(&input)
+        .arg("--index")
+        .output()
+        .unwrap();
+    assert!(index.status.success());
+    assert!(
+        String::from_utf8(index.stdout)
+            .unwrap()
+            .contains("KAI-RECOVERY-INDEX 1")
+    );
+    fs::remove_file(&recovery).unwrap();
     fs::remove_file(&output).unwrap();
     *data.last_mut().unwrap() ^= 1;
     fs::write(&input, &data).unwrap();
@@ -107,4 +133,6 @@ fn cli_verifies_exports_refuses_overwrite_and_corruption_before_output() {
     assert!(!rejected.status.success());
     assert!(rejected.stdout.is_empty());
     assert!(!output.exists());
+    assert!(!recover().status.success());
+    assert!(!recovery.exists());
 }

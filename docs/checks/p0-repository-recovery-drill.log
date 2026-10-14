@@ -1,0 +1,9 @@
+Isolated directory: /var/folders/5_/mxqc15bj5mb2y9p8bf5mmgz80000gn/T/kai-repository-recovery-xvfli23e/isolated
+Copied standalone reader; HOME/PATH reset; no repository checkout used by the reader.
+Original input copies removed after recovery export.
+Recovered container byte-identical; manifest and all 11 inventoried objects matched.
+Recovered index identical, including tombstone/divergent refs, checkpoint/staging,
+conflict alternatives and expired predecessor pointers.
+Resolved snapshot extracted using only copied reader and system tar; bytes matched.
+Unresolved snapshot refused before output creation.
+This is an isolated-directory drill on the current Mac, not clean-host qualification.

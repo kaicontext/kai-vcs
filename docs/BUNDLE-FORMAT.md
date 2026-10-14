@@ -1,37 +1,40 @@
-# Source bundle container and independent archive extraction — P0 draft
+# Bundle container and independent archive extraction — P0 draft
 
-Implements a bounded first slice of SPEC §§9.7, 10.6 and R18/R27. This is an
-experimental source-history bundle, not a full repository backup/restore command.
+Implements bounded portable bundles from SPEC §§9.7, 10.6 and R18/R27.
+[Repository recovery export](RECOVERY-EXPORT.md) preserves native repository state;
+this remains experimental and does not install a live database.
 
 Container bytes, in order:
 
 1. `KAI-BUNDLE\0` (11 bytes), version `u16be(1)`.
-2. Manifest framed length `u64be`, then one canonical type-19 transfer manifest.
+2. Manifest framed length `u64be`, then one canonical type-16 backup or type-19 transfer manifest.
 3. Each inventory object in manifest digest order: framed length `u64be`, then
    exactly that object's bytes. No count, padding, compression or trailing bytes.
 
 The manifest supplies roots, checksums, lengths, kinds, interpretation and native
 closure scope. The reader requires standalone completeness, no prerequisites and
-no required feature labels. Interpreted inventory supports blobs, trees, resolved
-revisions, Git envelopes, chunks, large blobs and annotated tags (1,2,3,12–15).
-Selected roots must be trees, resolved revisions or tags. All interpreted objects
-are checked, including unselected inventory. Parent ancestry, typed edges, envelope
-owner kinds, chunk boundaries and complete-content digests are verified. Unknown
-opaque inventory is hash/frame checked and retained in the bundle, but cannot
-satisfy any source edge or root. Unsupported interpreted metadata, nested packages,
-conflicted revisions and backup manifests fail explicitly; no claim is made that
-all native repository state is independently restorable yet.
+no required feature labels. Interpreted inventory supports all 19 registered types,
+including views, checkpoints, conflicts and advisory metadata. All interpreted
+objects are checked, including unselected inventory. Parent ancestry, typed edges,
+repository cross-object bindings, owner/envelope kinds, chunk boundaries and
+complete-content digests are verified. Unknown opaque inventory is hash/frame
+checked and preserved, but cannot satisfy required edges or roots. Retained
+archival pointers may remain absent according to the native retention contract.
 
 Default limits: 256 MiB whole input including framing, 100,000 objects, one million
 source edges/expanded paths, 64 MiB cumulative expanded path bytes, depth 256 and
-1 GiB total large-file verification work and logical archive content. These are reader limits, not changes to object
+1 GiB total large-file verification work and logical archive content. These are
+reader limits, not changes to object
 identity or a claim of large-repository qualification. Input memory is bounded;
 large files stream their verified chunks to the archive. No network, Git, hooks,
 filters, credentials or original database are used.
 
 `kai-bundle-reader BUNDLE` verifies and lists selected root IDs.
-`kai-bundle-reader BUNDLE --archive ROOT OUTPUT.tar` exports a selected tree,
-revision or tag. ROOT must be a declared selected root. The archive contains one
+`kai-bundle-reader BUNDLE --archive ID OUTPUT.tar` exports an inventoried tree,
+resolved revision/tag or resolved checkpoint working tree. Conflicted revisions
+and checkpoints fail source export while remaining fully recoverable as objects.
+`--index` and `--recover OUTPUT.tar` expose portable repository state. A source
+archive contains one
 resolved tree, not history. History remains in the bundle. Output is created
 exclusively only after complete verification and export preflight. Existing files
 are never overwritten. I/O failure may leave a partial new archive, reported as an
