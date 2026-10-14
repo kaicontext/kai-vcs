@@ -6,7 +6,7 @@ license = "MIT"
 description = "Native Kai VCS preservation kernel (experimental)"
 
 [workspace]
-members = ["tools/reference-reader"]
+members = ["tools/reference-reader", "tools/fixtures"]
 resolver = "3"
 
 [dependencies]

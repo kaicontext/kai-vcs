@@ -145,7 +145,7 @@ in the adapter required by the specification.
 
 P0 is **open**. All 19 object types have draft codecs. Embedded manifest profiles,
 capability/outcome review, clean-host extraction qualification, platform fault interfaces,
-full fixture generators, and independent reviewer approval are still required.
+broader fixture execution, and independent reviewer approval are still required.
 There is no durable object store, metadata transaction, commit, checkout, remote,
 or migration authority in this increment. Pure object verification does not
 acknowledge a saved revision or certify power-loss durability. All P1–P10 release
@@ -157,3 +157,7 @@ The draft [collaboration frontier profile](docs/COLLABORATION-FRONTIER.md) binds
 replica and per-file frontiers to a complete materialized tree inventory. Its
 read-only verifier checks immutable declarations; live writer coordination and
 CRDT operation replay remain unimplemented.
+
+Reproducible F01–F07 inputs and process-crash checks are available in
+[the fixture guide](docs/FIXTURES.md). The checked-in manifest pins expected
+bytes, kinds, and IDs. These inputs do not close later runtime acceptance gates.
