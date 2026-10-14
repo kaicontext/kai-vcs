@@ -35,6 +35,9 @@ format identifiers, but interpretation/completeness of these versioned manifests
 remains an acceptance-layer deliverable. A decoder never claims a manifest is
 complete, reproducible or safe to execute, and never reads the host environment.
 Do not populate these blobs with plaintext secrets or low-entropy secret hashes.
+The bounded v1 input/environment profiles and explicit context verifier are now
+defined in [EVIDENCE-PROFILES.md](EVIDENCE-PROFILES.md). Generic object decoding
+continues to preserve other profile identifiers without interpreting them.
 
 Revision/tree and input/environment manifests are required closure. Closure checks
 that the tree matches the revision and that a resolved/conflicted claim agrees

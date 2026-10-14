@@ -1,0 +1,86 @@
+[
+  {
+    "name": "inputs",
+    "kind": "inputs",
+    "accepted": true,
+    "json": "{\"schema_version\":1,\"revision\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"tree\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"dirty_overlay_digest\":\"b3:3333333333333333333333333333333333333333333333333333333333333333\",\"dependencies\":[{\"name\":\"lockfile\",\"digest\":\"b3:4444444444444444444444444444444444444444444444444444444444444444\"}],\"submodules\":[{\"path_hex\":\"7372632fff\",\"algorithm\":\"sha1\",\"object_id\":\"5555555555555555555555555555555555555555\"}]}"
+  },
+  {
+    "name": "environment",
+    "kind": "environment",
+    "accepted": true,
+    "json": "{\"schema_version\":1,\"platform\":\"linux-arm64/test\",\"container_digest\":\"sha256:6666666666666666666666666666666666666666666666666666666666666666\",\"toolchains\":[{\"name\":\"rustc\",\"version\":\"1.99.0\"}],\"variables\":[{\"name\":\"LANG\",\"kind\":\"public\",\"value\":\"en_US.UTF-8\"},{\"name\":\"SERVICE_VERSION\",\"kind\":\"opaque_secret_version\",\"value\":\"runner-token-1\"}],\"limitations\":[\"external service unavailable\"]}"
+  },
+  {
+    "name": "review",
+    "kind": "inputs",
+    "accepted": true,
+    "json": "{\"schema_version\":1,\"revision\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"tree\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"dependencies\":[{\"name\":\"lockfile\",\"digest\":\"b3:4444444444444444444444444444444444444444444444444444444444444444\"}],\"submodules\":[{\"path_hex\":\"7372632fff\",\"algorithm\":\"sha1\",\"object_id\":\"5555555555555555555555555555555555555555\"}],\"review\":{\"identifier\":\"review-1\",\"target_revision\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"policy\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\"}}"
+  },
+  {
+    "name": "invalid-schema_version",
+    "kind": "inputs",
+    "accepted": false,
+    "json": "{\"schema_version\":2,\"revision\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"tree\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"dirty_overlay_digest\":\"b3:3333333333333333333333333333333333333333333333333333333333333333\",\"dependencies\":[{\"name\":\"lockfile\",\"digest\":\"b3:4444444444444444444444444444444444444444444444444444444444444444\"}],\"submodules\":[{\"path_hex\":\"7372632fff\",\"algorithm\":\"sha1\",\"object_id\":\"5555555555555555555555555555555555555555\"}]}"
+  },
+  {
+    "name": "invalid-dirty_overlay_digest",
+    "kind": "inputs",
+    "accepted": false,
+    "json": "{\"schema_version\":1,\"revision\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"tree\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"dirty_overlay_digest\":null,\"dependencies\":[{\"name\":\"lockfile\",\"digest\":\"b3:4444444444444444444444444444444444444444444444444444444444444444\"}],\"submodules\":[{\"path_hex\":\"7372632fff\",\"algorithm\":\"sha1\",\"object_id\":\"5555555555555555555555555555555555555555\"}]}"
+  },
+  {
+    "name": "invalid-revision",
+    "kind": "inputs",
+    "accepted": false,
+    "json": "{\"schema_version\":1,\"revision\":\"K1:B3:1111111111111111111111111111111111111111111111111111111111111111\",\"tree\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"dirty_overlay_digest\":\"b3:3333333333333333333333333333333333333333333333333333333333333333\",\"dependencies\":[{\"name\":\"lockfile\",\"digest\":\"b3:4444444444444444444444444444444444444444444444444444444444444444\"}],\"submodules\":[{\"path_hex\":\"7372632fff\",\"algorithm\":\"sha1\",\"object_id\":\"5555555555555555555555555555555555555555\"}]}"
+  },
+  {
+    "name": "invalid-submodules",
+    "kind": "inputs",
+    "accepted": false,
+    "json": "{\"schema_version\":1,\"revision\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"tree\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"dirty_overlay_digest\":\"b3:3333333333333333333333333333333333333333333333333333333333333333\",\"dependencies\":[{\"name\":\"lockfile\",\"digest\":\"b3:4444444444444444444444444444444444444444444444444444444444444444\"}],\"submodules\":[{\"path_hex\":\"7372632fff\",\"algorithm\":\"sha1\",\"object_id\":\"5555555555555555555555555555555555555555\"},{\"path_hex\":\"7372632fff\",\"algorithm\":\"sha1\",\"object_id\":\"5555555555555555555555555555555555555555\"}]}"
+  },
+  {
+    "name": "traversal",
+    "kind": "inputs",
+    "accepted": false,
+    "json": "{\"schema_version\":1,\"revision\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"tree\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"dirty_overlay_digest\":\"b3:3333333333333333333333333333333333333333333333333333333333333333\",\"dependencies\":[{\"name\":\"lockfile\",\"digest\":\"b3:4444444444444444444444444444444444444444444444444444444444444444\"}],\"submodules\":[{\"path_hex\":\"2e2e\",\"algorithm\":\"sha1\",\"object_id\":\"5555555555555555555555555555555555555555\"}]}"
+  },
+  {
+    "name": "truncated-git-id",
+    "kind": "inputs",
+    "accepted": false,
+    "json": "{\"schema_version\":1,\"revision\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"tree\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"dirty_overlay_digest\":\"b3:3333333333333333333333333333333333333333333333333333333333333333\",\"dependencies\":[{\"name\":\"lockfile\",\"digest\":\"b3:4444444444444444444444444444444444444444444444444444444444444444\"}],\"submodules\":[{\"path_hex\":\"7372632fff\",\"algorithm\":\"sha1\",\"object_id\":\"11\"}]}"
+  },
+  {
+    "name": "empty-secret-token",
+    "kind": "environment",
+    "accepted": false,
+    "json": "{\"schema_version\":1,\"platform\":\"linux-arm64/test\",\"container_digest\":\"sha256:6666666666666666666666666666666666666666666666666666666666666666\",\"toolchains\":[{\"name\":\"rustc\",\"version\":\"1.99.0\"}],\"variables\":[{\"name\":\"LANG\",\"kind\":\"public\",\"value\":\"en_US.UTF-8\"},{\"name\":\"SERVICE_VERSION\",\"kind\":\"opaque_secret_version\",\"value\":\"\"}],\"limitations\":[\"external service unavailable\"]}"
+  },
+  {
+    "name": "invalid-env-name",
+    "kind": "environment",
+    "accepted": false,
+    "json": "{\"schema_version\":1,\"platform\":\"linux-arm64/test\",\"container_digest\":\"sha256:6666666666666666666666666666666666666666666666666666666666666666\",\"toolchains\":[{\"name\":\"rustc\",\"version\":\"1.99.0\"}],\"variables\":[{\"name\":\"BAD=NAME\",\"kind\":\"public\",\"value\":\"en_US.UTF-8\"},{\"name\":\"SERVICE_VERSION\",\"kind\":\"opaque_secret_version\",\"value\":\"runner-token-1\"}],\"limitations\":[\"external service unavailable\"]}"
+  },
+  {
+    "name": "duplicate-toolchain",
+    "kind": "environment",
+    "accepted": false,
+    "json": "{\"schema_version\":1,\"platform\":\"linux-arm64/test\",\"container_digest\":\"sha256:6666666666666666666666666666666666666666666666666666666666666666\",\"toolchains\":[{\"name\":\"rustc\",\"version\":\"1.99.0\"},{\"name\":\"rustc\",\"version\":\"1.99.0\"}],\"variables\":[{\"name\":\"LANG\",\"kind\":\"public\",\"value\":\"en_US.UTF-8\"},{\"name\":\"SERVICE_VERSION\",\"kind\":\"opaque_secret_version\",\"value\":\"runner-token-1\"}],\"limitations\":[\"external service unavailable\"]}"
+  },
+  {
+    "name": "reordered-keys",
+    "kind": "inputs",
+    "accepted": false,
+    "json": "{\"submodules\":[{\"path_hex\":\"7372632fff\",\"algorithm\":\"sha1\",\"object_id\":\"5555555555555555555555555555555555555555\"}],\"dependencies\":[{\"name\":\"lockfile\",\"digest\":\"b3:4444444444444444444444444444444444444444444444444444444444444444\"}],\"dirty_overlay_digest\":\"b3:3333333333333333333333333333333333333333333333333333333333333333\",\"tree\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"revision\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"schema_version\":1}"
+  },
+  {
+    "name": "trailing-whitespace",
+    "kind": "inputs",
+    "accepted": false,
+    "json": "{\"schema_version\":1,\"revision\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\",\"tree\":\"k1:b3:2222222222222222222222222222222222222222222222222222222222222222\",\"dirty_overlay_digest\":\"b3:3333333333333333333333333333333333333333333333333333333333333333\",\"dependencies\":[{\"name\":\"lockfile\",\"digest\":\"b3:4444444444444444444444444444444444444444444444444444444444444444\"}],\"submodules\":[{\"path_hex\":\"7372632fff\",\"algorithm\":\"sha1\",\"object_id\":\"5555555555555555555555555555555555555555\"}]}\n"
+  }
+]

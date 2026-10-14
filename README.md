@@ -12,6 +12,9 @@ gates. This is an experimental preservation kernel, not a replacement CLI yet.
 - Causal revisions with ordered parents, logical change IDs, opaque authors and
   messages, explicit optional provenance, imported envelopes, and conflict refs.
 - Raw chunks and large-blob manifests with verified ordered assembly.
+- Canonical evidence input/environment profiles with bounded source/context
+  verification, exact Gitlink inventories and visible reproducibility limitations;
+  see [evidence profiles](docs/EVIDENCE-PROFILES.md).
 - Bounded JSON capability negotiation and mutation outcomes with explicit exit
   codes, interruption handling and exact decimal-string generations. See
   [interface contract](docs/INTERFACE-CONTRACT.md); no mutation CLI is implemented.

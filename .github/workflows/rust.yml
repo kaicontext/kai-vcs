@@ -19,7 +19,9 @@ jobs:
       - name: Conformance and reference model
         run: cargo +1.99.0 test --workspace --locked
       - name: Independent JSON contract corpus
-        run: python tools/interface-reference/check.py
+        run: |
+          python tools/interface-reference/check.py
+          python tools/interface-reference/profiles.py
       - name: Reproduce independent golden vectors
         shell: bash
         run: |

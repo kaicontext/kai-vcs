@@ -288,13 +288,41 @@ still require backing evidence from future P1/P5 operations. The reader CLI rema
 read-only. P0 is open; full manifest profiles, extraction/fault fixtures and independent
 review remain outstanding. Checks were local; remote CI/reviewer approval did not run.
 
+## Evidence-profile increment — 2026-10-14
+
+Defined [EVIDENCE-PROFILES.md](EVIDENCE-PROFILES.md) before implementing canonical
+input/environment profile blobs and `verify_evidence_context`, following SPEC §11.2.
+The verifier first checks required native evidence closure, then profile byte IDs,
+canonical encodings, revision/tree bindings, review-target declaration, visible
+limitations and the exact Gitlink inventory across all directory paths. Repeated
+subtrees at different paths are checked separately; non-UTF-8 names are preserved.
+Reads and path expansion are budgeted. No environment, command, secret or external
+submodule is fetched/executed automatically.
+
+- **112 Rust tests passed**, including 10 new context/profile tests.
+- Two canonical profile examples plus **14 accepted/rejected profile cases** agree
+  between Rust and an independent Python checker. The previous 21 interface cases
+  still pass. Existing object formats/vectors remain unchanged.
+- Workspace Clippy (warnings denied), formatting and whitespace checks passed.
+- Evidence: `checks/p0-evidence-profile-tests.log`,
+  `checks/p0-evidence-profile-clippy.log`, `checks/p0-evidence-profile-reference.log`,
+  `checks/p0-evidence-profile-sources.sha256`.
+
+Context validity does not authenticate a runner, prove dependency completeness,
+resolve opaque secret-version tokens or grant review/policy approval. Review policy/
+base IDs and overlay/dependency digests remain claims requiring acceptance-layer
+verification and explicit retention selection. The collaboration frontier profile
+is the next embedded-profile gap. Full extraction, failure harnesses and independent
+review remain P0 work. Tests were local; remote CI/reviewer approval did not run.
+This increment is local work after the earlier GitHub push; no phase gate is closed.
+
 ## Next P0 work
 
 1. Review the proposed capability/outcome contracts against storage and transport
    implementations; define remaining versioned request/session framing.
-2. Define and validate embedded evidence input/environment and collaboration
-   frontier manifest profiles, signed-payload interoperability, and completeness/
-   applicability rules. Resolve remaining size/streaming and submap choices before freeze.
+2. Define the collaboration frontier manifest profile; review evidence-profile
+   completeness/applicability and signed-payload interoperability. Resolve remaining
+   size/streaming and submap choices before freeze.
 3. Extend the independent reader to complete bundle/source extraction.
 4. Add F01–F07 generators with byte/kind manifests and deterministic seeds.
 5. Define fault-injection/platform interfaces and record ADR review for the native
