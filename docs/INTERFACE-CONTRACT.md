@@ -77,3 +77,40 @@ is never success. Interruption preserves the known outcome and its code, includi
 0 or 9 after commit; it never invents a rollback or blindly changes success to 130.
 Indeterminate retries must query operation/request status before another mutation.
 Generation/receipt truth, idempotency storage and transaction status remain P1/P5.
+
+## Negotiation exchange (version 1)
+
+SPEC §§9.1–9.2 negotiation now has transport-neutral JSON request and reply
+records. Both use the existing 1 MiB bound, duplicate/unknown-field rejection,
+UUID spelling, optional/null rules and label ordering. These are typed payloads;
+HTTP/SSH dispatch, authenticated hello and session lifecycle remain future work.
+
+A request contains exactly `schema_version: 1`, `request_id`, `repository_id`,
+and `policy`. Both IDs are 32 lowercase hexadecimal digits. `policy` requires
+`selection` (`complete`, `partial`, `shallow`), `require_ref_transactions`
+(boolean), `required_signatures` (ordered unique labels), and `minimum_durability`;
+`replication_policy` is optional. Replicated minimum durability requires its exact
+native policy ID, and other minima forbid it. No transfer selection defaults.
+
+A successful reply contains exactly `schema_version: 1`, echoed `request_id`,
+echoed `repository_id`, and `negotiated`. The latter contains every field of the
+negotiation result described above: protocol_version, object_format, compression,
+features, signature_formats, max_object_bytes, max_frame_bytes, selection,
+ref_transactions, receiver_durability, and optional replication_policy.
+
+The receiver constructs a reply by applying the published negotiation rules.
+The client accepts a reply only if it equals the result recomputed from the
+original request and both trusted capability offers, including every ID and
+selected limit. Matching IDs alone is insufficient. Changed capabilities require
+a fresh exchange; a previous result cannot authorize a downgrade or different
+repository. A rejected negotiation produces an error, never a success reply.
+The request ID is a correlation identifier, not a replay-proof nonce or durable
+transaction ID. Authentication, offer freshness and repository authorization
+belong to the session adapter. No ref or object mutation occurs here.
+
+Structural definitions are in `negotiation.schema.json`; semantic reply checking
+requires the request and offers. The shared corpus `tests/fixtures/negotiation.json`
+is checked by Rust and the independent Python negotiation implementation.
+
+Try the local request/reply and frame-limit handoff with
+`cargo run --locked --offline --example negotiation`. It performs no network I/O.

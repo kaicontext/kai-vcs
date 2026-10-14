@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Negotiation exchange v1",
+  "$comment": "Cross-field policy constraints and reply equality against original request and offers are normative in INTERFACE-CONTRACT.md. Each JSON record is at most 1 MiB.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/request"
+    },
+    {
+      "$ref": "#/$defs/reply"
+    }
+  ],
+  "$defs": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "request_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "repository_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "policy": {
+          "type": "object",
+          "properties": {
+            "selection": {
+              "enum": [
+                "complete",
+                "partial",
+                "shallow"
+              ]
+            },
+            "require_ref_transactions": {
+              "type": "boolean"
+            },
+            "required_signatures": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9_./-]+$"
+              },
+              "uniqueItems": true
+            },
+            "minimum_durability": {
+              "enum": [
+                "none",
+                "single-node-durable",
+                "replicated-durable"
+              ]
+            },
+            "replication_policy": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^k1:b3:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "selection",
+            "require_ref_transactions",
+            "required_signatures",
+            "minimum_durability"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "repository_id",
+        "policy"
+      ],
+      "additionalProperties": false
+    },
+    "reply": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "request_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "repository_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "negotiated": {
+          "type": "object",
+          "properties": {
+            "protocol_version": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            },
+            "object_format": {
+              "type": "string"
+            },
+            "compression": {
+              "type": "string"
+            },
+            "features": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9_./-]+$"
+              },
+              "uniqueItems": true
+            },
+            "signature_formats": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9_./-]+$"
+              },
+              "uniqueItems": true
+            },
+            "max_object_bytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4294967295
+            },
+            "max_frame_bytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4294967295
+            },
+            "selection": {
+              "enum": [
+                "complete",
+                "partial",
+                "shallow"
+              ]
+            },
+            "ref_transactions": {
+              "type": "boolean"
+            },
+            "receiver_durability": {
+              "enum": [
+                "none",
+                "single-node-durable",
+                "replicated-durable"
+              ]
+            },
+            "replication_policy": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^k1:b3:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "protocol_version",
+            "object_format",
+            "compression",
+            "features",
+            "signature_formats",
+            "max_object_bytes",
+            "max_frame_bytes",
+            "selection",
+            "ref_transactions",
+            "receiver_durability"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "repository_id",
+        "negotiated"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
