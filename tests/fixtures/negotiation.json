@@ -1,0 +1,362 @@
+[
+  {
+    "name": "complete",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": true,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}",
+    "expected": {"schema_version":1,"request_id":"01010101010101010101010101010101","repository_id":"02020202020202020202020202020202","negotiated":{"protocol_version":2,"object_format":"native-v1-blake3","compression":"none","features":["atomic-refs"],"signature_formats":["sshsig"],"max_object_bytes":1024,"max_frame_bytes":2048,"selection":"complete","ref_transactions":true,"receiver_durability":"none"}}
+  },
+  {
+    "name": "partial",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"partial\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": true,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"partial\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}",
+    "expected": {"schema_version":1,"request_id":"01010101010101010101010101010101","repository_id":"02020202020202020202020202020202","negotiated":{"protocol_version":2,"object_format":"native-v1-blake3","compression":"none","features":["atomic-refs"],"signature_formats":["sshsig"],"max_object_bytes":1024,"max_frame_bytes":2048,"selection":"partial","ref_transactions":true,"receiver_durability":"none"}}
+  },
+  {
+    "name": "shallow",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"shallow\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": true,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"shallow\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}",
+    "expected": {"schema_version":1,"request_id":"01010101010101010101010101010101","repository_id":"02020202020202020202020202020202","negotiated":{"protocol_version":2,"object_format":"native-v1-blake3","compression":"none","features":["atomic-refs"],"signature_formats":["sshsig"],"max_object_bytes":1024,"max_frame_bytes":2048,"selection":"shallow","ref_transactions":true,"receiver_durability":"none"}}
+  },
+  {
+    "name": "optional-null",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\",\"replication_policy\":null}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": true,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\",\"replication_policy\":null}}",
+    "expected": {"schema_version":1,"request_id":"01010101010101010101010101010101","repository_id":"02020202020202020202020202020202","negotiated":{"protocol_version":2,"object_format":"native-v1-blake3","compression":"none","features":["atomic-refs"],"signature_formats":["sshsig"],"max_object_bytes":1024,"max_frame_bytes":2048,"selection":"complete","ref_transactions":true,"receiver_durability":"none"}}
+  },
+  {
+    "name": "request-schema_version",
+    "request": "{\"schema_version\":2,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "request-request_id",
+    "request": "{\"schema_version\":1,\"request_id\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "request-repository_id",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":1,\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "request-extra",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"},\"extra\":true}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "missing-schema_version",
+    "request": "{\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "missing-request_id",
+    "request": "{\"schema_version\":1,\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "missing-repository_id",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "missing-policy",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\"}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "policy-selection-auto",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"auto\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "policy-selection-None",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":null,\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "policy-require_ref_transactions-1",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":1,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "policy-required_signatures-['sshsig', 'sshsig']",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\",\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "policy-minimum_durability-replicated-durable",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"replicated-durable\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "policy-replication_policy-k1:b3:0000000000000000000000000000000000000000000000000000000000000000",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\",\"replication_policy\":\"k1:b3:0000000000000000000000000000000000000000000000000000000000000000\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "policy-extra-True",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\",\"extra\":true}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "reply-schema_version",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":2,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "reply-request_id",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"03030303030303030303030303030303\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "reply-repository_id",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"03030303030303030303030303030303\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "reply-extra",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"},\"extra\":true}"
+  },
+  {
+    "name": "negotiated-protocol_version-1",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":1,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "negotiated-object_format-other",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"other\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "negotiated-compression-zstd",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"zstd\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "negotiated-features-[]",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "negotiated-signature_formats-[]",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "negotiated-max_object_bytes-2048",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":2048,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "negotiated-max_frame_bytes-4096",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":4096,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "negotiated-selection-partial",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"partial\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "negotiated-ref_transactions-False",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":false,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "negotiated-ref_transactions-1",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":1,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "negotiated-receiver_durability-replicated-durable",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"replicated-durable\"}}"
+  },
+  {
+    "name": "negotiated-replication_policy-k1:b3:0000000000000000000000000000000000000000000000000000000000000000",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\",\"replication_policy\":\"k1:b3:0000000000000000000000000000000000000000000000000000000000000000\"}}"
+  },
+  {
+    "name": "negotiated-extra-True",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\",\"extra\":true}}"
+  },
+  {
+    "name": "receiver-protocol_versions",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[3],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "receiver-required_features",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":["unknown"],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "receiver-ref_transactions",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":false,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "receiver-signature_formats",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":[],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "sender-compression",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["zstd"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false
+  },
+  {
+    "name": "replicated",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"replicated-durable\",\"replication_policy\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"replicated-durable","replication_policy":"k1:b3:1111111111111111111111111111111111111111111111111111111111111111"},
+    "accepted": true,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"replicated-durable\",\"replication_policy\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\"}}",
+    "expected": {"schema_version":1,"request_id":"01010101010101010101010101010101","repository_id":"02020202020202020202020202020202","negotiated":{"protocol_version":2,"object_format":"native-v1-blake3","compression":"none","features":["atomic-refs"],"signature_formats":["sshsig"],"max_object_bytes":1024,"max_frame_bytes":2048,"selection":"complete","ref_transactions":true,"receiver_durability":"replicated-durable","replication_policy":"k1:b3:1111111111111111111111111111111111111111111111111111111111111111"}}
+  },
+  {
+    "name": "replicated-policy-mismatch",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"replicated-durable\",\"replication_policy\":\"k1:b3:1111111111111111111111111111111111111111111111111111111111111111\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"replicated-durable","replication_policy":"k1:b3:2222222222222222222222222222222222222222222222222222222222222222"},
+    "accepted": false
+  },
+  {
+    "name": "duplicate-request",
+    "request": "{\"schema_version\":1,\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "trailing-request",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}} {}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "duplicate-reply",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}}"
+  },
+  {
+    "name": "trailing-reply",
+    "request": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"policy\":{\"selection\":\"complete\",\"require_ref_transactions\":true,\"required_signatures\":[\"sshsig\"],\"minimum_durability\":\"none\"}}",
+    "sender": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "receiver": {"schema_version":1,"protocol_versions":[1,2],"object_formats":["native-v1-blake3"],"supported_features":["atomic-refs"],"required_features":[],"max_object_bytes":1024,"max_frame_bytes":2048,"compression":["none"],"signature_formats":["sshsig"],"ref_transactions":true,"partial":true,"shallow":true,"durability":"none"},
+    "accepted": false,
+    "reply": "{\"schema_version\":1,\"request_id\":\"01010101010101010101010101010101\",\"repository_id\":\"02020202020202020202020202020202\",\"negotiated\":{\"protocol_version\":2,\"object_format\":\"native-v1-blake3\",\"compression\":\"none\",\"features\":[\"atomic-refs\"],\"signature_formats\":[\"sshsig\"],\"max_object_bytes\":1024,\"max_frame_bytes\":2048,\"selection\":\"complete\",\"ref_transactions\":true,\"receiver_durability\":\"none\"}} {}"
+  }
+]

@@ -88,8 +88,10 @@ schema mismatch. Deterministic [view submaps](VIEW-FORMAT.md) now have codecs,
 required-closure checks, golden vectors and independent recovery coverage.
 The [uncompressed native object-frame profile](TRANSFER-FRAMING.md) now provides
 bounded streaming, checksums, duplicate rejection and independent validation.
-Session/request schemas, remaining protocol/profile decisions and independent
-approvals remain open. No format freeze or P0 exit is declared.
+Versioned negotiation requests and replies now bind repository/request IDs and
+verify selected results against both offers and explicit policy. Authenticated
+hello/session lifecycle, remaining request schemas, protocol/profile decisions
+and independent approvals remain open. No format freeze or P0 exit is declared.
 
 1. Review capability/outcome contracts against storage and transport needs;
    define remaining versioned request/session framing.

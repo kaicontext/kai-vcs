@@ -119,21 +119,25 @@ impl Capabilities {
         encode(self)
     }
 }
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
 pub enum TransferSelection {
     Complete,
     Partial,
     Shallow,
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct NegotiationRequest {
     pub selection: TransferSelection,
     pub require_ref_transactions: bool,
     pub required_signatures: Vec<String>,
     pub minimum_durability: Durability,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_policy: Option<String>,
 }
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Negotiated {
     pub protocol_version: u16,
     pub object_format: String,
@@ -145,6 +149,7 @@ pub struct Negotiated {
     pub selection: TransferSelection,
     pub ref_transactions: bool,
     pub receiver_durability: Durability,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_policy: Option<String>,
 }
 fn intersection(a: &[String], b: &[String]) -> Vec<String> {
@@ -362,6 +367,89 @@ impl MutationResult {
     }
     pub fn to_json(&self) -> Result<Vec<u8>, String> {
         self.validate()?;
+        encode(self)
+    }
+}
+
+/// Versioned negotiation payload; session authorization is the caller's job.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct NegotiationEnvelope {
+    pub schema_version: u16,
+    pub request_id: String,
+    pub repository_id: String,
+    pub policy: NegotiationRequest,
+}
+impl NegotiationEnvelope {
+    pub fn validate(&self) -> Result<(), String> {
+        if self.schema_version != 1 || !uuid(&self.request_id) || !uuid(&self.repository_id) {
+            return Err("invalid negotiation version or identity".into());
+        }
+        labels(&self.policy.required_signatures)?;
+        if (self.policy.minimum_durability == Durability::ReplicatedDurable)
+            != self.policy.replication_policy.is_some()
+        {
+            return Err("requested replication policy/class mismatch".into());
+        }
+        if let Some(id) = &self.policy.replication_policy {
+            oid(id)?;
+        }
+        Ok(())
+    }
+    pub fn from_json(input: &[u8]) -> Result<Self, String> {
+        let value: Self = parse(input)?;
+        value.validate()?;
+        Ok(value)
+    }
+    pub fn to_json(&self) -> Result<Vec<u8>, String> {
+        self.validate()?;
+        encode(self)
+    }
+    pub fn reply(
+        &self,
+        sender: &Capabilities,
+        receiver: &Capabilities,
+    ) -> Result<NegotiationReply, String> {
+        self.validate()?;
+        Ok(NegotiationReply {
+            schema_version: 1,
+            request_id: self.request_id.clone(),
+            repository_id: self.repository_id.clone(),
+            negotiated: negotiate(sender, receiver, &self.policy)?,
+        })
+    }
+}
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct NegotiationReply {
+    pub schema_version: u16,
+    pub request_id: String,
+    pub repository_id: String,
+    pub negotiated: Negotiated,
+}
+impl NegotiationReply {
+    /// Require the original request and trusted offers at every acceptance point.
+    pub fn verify_json(
+        input: &[u8],
+        request: &NegotiationEnvelope,
+        sender: &Capabilities,
+        receiver: &Capabilities,
+    ) -> Result<Self, String> {
+        let value: Self = parse(input)?;
+        if value != request.reply(sender, receiver)? {
+            return Err("negotiation reply does not match request and offers".into());
+        }
+        Ok(value)
+    }
+    pub fn to_json(
+        &self,
+        request: &NegotiationEnvelope,
+        sender: &Capabilities,
+        receiver: &Capabilities,
+    ) -> Result<Vec<u8>, String> {
+        if self != &request.reply(sender, receiver)? {
+            return Err("negotiation reply does not match request and offers".into());
+        }
         encode(self)
     }
 }
