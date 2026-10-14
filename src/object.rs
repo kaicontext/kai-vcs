@@ -6,6 +6,7 @@ use crate::{
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Object {
     View(Box<crate::View>),
+    PartitionedView(Box<crate::PartitionedView>),
     Evidence(Box<crate::Evidence>),
     Attestation(Box<crate::Attestation>),
     AnalysisManifest(Box<crate::AnalysisManifest>),
@@ -43,6 +44,7 @@ impl Object {
     pub fn encode(&self) -> Result<Vec<u8>, String> {
         match self {
             Self::View(view) => view.encode(),
+            Self::PartitionedView(view) => view.encode(),
             Self::Evidence(v) => v.encode(),
             Self::Attestation(v) => v.encode(),
             Self::AnalysisManifest(v) => v.encode(),
@@ -92,6 +94,9 @@ impl Object {
             11 => Ok(Self::AnalysisManifest(Box::new(
                 crate::AnalysisManifest::decode(input)?,
             ))),
+            6 if payload.first() == Some(&0xa3) => Ok(Self::PartitionedView(Box::new(
+                crate::PartitionedView::decode(input)?,
+            ))),
             6 => Ok(Self::View(Box::new(crate::View::decode(input)?))),
             1 => Ok(Self::Blob(Blob::decode(input)?)),
             2 => Ok(Self::Tree(Tree::decode(input)?)),
@@ -117,7 +122,7 @@ impl Object {
     }
     pub fn type_code(&self) -> u16 {
         match self {
-            Self::View(_) => 6,
+            Self::View(_) | Self::PartitionedView(_) => 6,
             Self::Evidence(_) => 9,
             Self::Attestation(_) => 10,
             Self::AnalysisManifest(_) => 11,
@@ -191,6 +196,11 @@ impl Object {
                 add(v.tree, Required, &[2]);
                 for id in &v.results {
                     add(*id, RetainedMetadata, &[1, 14]);
+                }
+            }
+            Self::PartitionedView(view) => {
+                for (_, id) in &view.submaps {
+                    add(*id, Required, &[6]);
                 }
             }
             Self::View(view) => {

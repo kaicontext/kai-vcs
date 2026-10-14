@@ -225,3 +225,27 @@ pub fn container(f: &Fixture) -> Vec<u8> {
     }
     b
 }
+
+/// Same repository state represented by content-addressed view submaps.
+pub fn partitioned_fixture() -> Fixture {
+    let mut f = fixture();
+    let Object::View(view) = Object::decode(&f.store.remove(&f.view).unwrap()).unwrap() else {
+        unreachable!()
+    };
+    let (root, submaps) = view.partition().unwrap();
+    for submap in submaps {
+        put(&mut f.store, Object::View(Box::new(submap)));
+    }
+    f.view = put(&mut f.store, Object::PartitionedView(Box::new(root)));
+    let old_operation = f.backup.current_operation.unwrap();
+    let Object::Operation(mut op) =
+        Object::decode(&f.store.remove(&old_operation).unwrap()).unwrap()
+    else {
+        unreachable!()
+    };
+    op.post_view = f.view;
+    f.backup.current_operation = Some(put(&mut f.store, Object::Operation(op)));
+    f.backup.current_view = f.view;
+    f.backup.contents.inventory = inventory(&f.store);
+    f
+}

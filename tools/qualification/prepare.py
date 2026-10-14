@@ -30,6 +30,7 @@ def main():
     shutil.copy2(repo / 'target/debug' / exe, dest / exe)
     source_root = run('run', '--locked', '--example', 'source_bundle', '--', str(dest / 'source.kai-bundle'))
     repository = run('run', '--locked', '--example', 'repository_bundle', '--', str(dest / 'repository.kai-bundle'))
+    run('run', '--locked', '--example', 'repository_bundle', '--', str(dest / 'submaps.kai-bundle'), '--submaps')
     run('run', '--locked', '--example', 'recovery_cases', '--', str(dest))
     expected = {'source_root': source_root,
                 'repository_ids': dict(line.split(': ', 1) for line in repository.splitlines())}

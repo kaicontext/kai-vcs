@@ -6,8 +6,12 @@ use std::io::Write;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let output = std::env::args_os()
         .nth(1)
-        .ok_or("usage: repository_bundle OUTPUT.kai-bundle")?;
-    let f = fixture::fixture();
+        .ok_or("usage: repository_bundle OUTPUT.kai-bundle [--submaps]")?;
+    let f = if std::env::args_os().nth(2).as_deref() == Some(std::ffi::OsStr::new("--submaps")) {
+        fixture::partitioned_fixture()
+    } else {
+        fixture::fixture()
+    };
     verify_package(
         &Object::BackupManifest(Box::new(f.backup.clone())),
         &[],

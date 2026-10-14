@@ -84,13 +84,14 @@ from the review tree and remain available in earlier Git commits.
 
 Executable [schema validation](SCHEMA-VALIDATION.md) now checks all 19 types and
 explicit integer ranges against both codecs. This closes the identified numeric
-schema mismatch; view submap encoding, protocol/profile decisions and independent
-approvals remain open. No format freeze or P0 exit is declared.
+schema mismatch. Deterministic [view submaps](VIEW-FORMAT.md) now have codecs,
+required-closure checks, golden vectors and independent recovery coverage.
+Protocol/profile decisions and independent approvals remain open. No format freeze or P0 exit is declared.
 
 1. Review capability/outcome contracts against storage and transport needs;
    define remaining versioned request/session framing.
 2. Review evidence/frontier completeness, protocol binding, applicability and
-   signed-payload interoperability. Resolve size/streaming and submap choices.
+   signed-payload interoperability. Resolve size/streaming choices and review the bounded submap layout.
 3. Broaden clean-host recovery and runtime fixture execution before closing T012.
 4. Connect fault hooks to platform/storage implementations when available;
    review ADRs for native authority and MIT preservation-kernel licensing.

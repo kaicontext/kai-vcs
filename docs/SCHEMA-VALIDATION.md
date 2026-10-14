@@ -23,7 +23,7 @@ validation API is exercised here.
 
 ## Coverage
 
-- All 34 published vectors cover all 19 object type codes. Each must pass the
+- All 38 published vectors cover all 19 object type codes. Each must pass the
   CDDL rule selected by its envelope type and both Kai codecs.
 - Identity timestamps across revision/change/checkpoint/operation/tag/evidence/
   attestation, operation start/finish, evidence start/finish/exit status, and

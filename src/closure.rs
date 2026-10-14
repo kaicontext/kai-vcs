@@ -55,6 +55,8 @@ pub fn verify_closure(
     let mut revisions = HashMap::new();
     let mut checkpoints = HashMap::new();
     let mut views = Vec::new();
+    let mut submap_buckets = HashMap::new();
+    let mut partitioned_views = Vec::new();
     let mut evidence = Vec::new();
     let mut revision_sources = HashMap::new();
     let mut git_envelopes = HashMap::new();
@@ -142,7 +144,11 @@ pub fn verify_closure(
             Object::CollaborationBarrier(v) => {
                 barriers.insert(id, (v.workspace, v.tree));
             }
-            Object::View(view) => views.push(view),
+            Object::PartitionedView(view) => partitioned_views.push(view),
+            Object::View(view) => {
+                submap_buckets.insert(id, view.submap_bucket());
+                views.push(view);
+            }
             Object::Evidence(value) => evidence.push(value),
             Object::Revision(revision) => {
                 if let Some(id) = revision.git_envelope {
@@ -193,6 +199,13 @@ pub fn verify_closure(
             )
         {
             return Err("evidence source claim contradicts revision".into());
+        }
+    }
+    for root in partitioned_views {
+        for (bucket, id) in root.submaps {
+            if submap_buckets.get(&id) != Some(&Some(bucket)) {
+                return Err("view submap must be nonempty, inline, generation zero, and in its declared bucket".into());
+            }
         }
     }
     for view in views {
