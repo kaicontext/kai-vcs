@@ -19,7 +19,9 @@ jobs:
         run: cargo +1.99.0 clippy --workspace --all-targets --locked -- -D warnings
       - name: Conformance and reference model
         run: cargo +1.99.0 test --workspace --locked
-      - name: Independent JSON contract corpus
+      - name: Independent JSON contracts and tooling regressions
+        env:
+          RUSTUP_TOOLCHAIN: 1.99.0
         run: |
           python tools/interface-reference/check.py
           python tools/interface-reference/profiles.py

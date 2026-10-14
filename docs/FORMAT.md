@@ -92,8 +92,8 @@ by `/`; absolute paths, duplicate paths and invalid components are rejected.
 Closure verification checks complete conflict bindings, absence of unresolved
 paths from ordinary trees, and rejection of shadowing non-directory ancestors.
 A syntactically decoded revision alone is not an accepted head.
-Required self-links/cycles are invalid. A future closure validator must reject
-unsupported envelope targets, not silently omit them. Conflict codecs and their
+Required self-links/cycles are invalid. Closure verification rejects
+unsupported required targets rather than silently omitting them. Conflict codecs and their
 required alternatives are implemented by the recovery registry.
 
 ## Large blob fields

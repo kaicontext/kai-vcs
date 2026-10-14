@@ -117,7 +117,7 @@ def live(movie):
         "Exporting and restoring with the local tar tool..."])
     checked(reader + [str(source), "--archive", root, str(archive)], work)
     restored.mkdir()
-    checked(["tar", "-xf", str(archive), "-C", str(restored)], work)
+    checked(["tar", "-xpf", str(archive), "-C", str(restored)], work)
     checks = [
         ((restored / "hello.txt").read_bytes() == b"Hello from a verified Kai bundle.\n", "Text bytes match"),
         ((restored / "data/bytes.bin").read_bytes() == bytes([0, 255, 13, 10]), "Binary bytes match: 00 ff 0d 0a"),
@@ -151,7 +151,7 @@ def live(movie):
         "CREATE       VERIFY       RESTORE       TAMPER", "  [OK] ------ [OK] ------- [OK] -------- [BLOCKED]", "",
         "These were real commands, with checked results.",
         "Today: verified source bundles and snapshot archive export.",
-        "Still ahead: full repository recovery and durable storage.",
+        "Also available: repository recovery. Durable storage is next.",
         "No live collaboration or working VCS is claimed here."])
     movie.emit(f"  Explore the restored files:\r\n  {restored}\r\n\r\n")
     movie.pause(2)
@@ -159,7 +159,9 @@ def live(movie):
 
 def replay(path, fast):
     with path.open() as stream:
-        header = json.loads(next(stream))
+        first = next(stream, None)
+        require(first is not None, "Empty recording; expected an asciicast v2 header.")
+        header = json.loads(first)
         require(header.get("version") == 2, "Expected an asciicast v2 recording.")
         previous = 0.0
         for line in stream:

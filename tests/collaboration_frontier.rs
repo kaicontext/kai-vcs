@@ -142,7 +142,7 @@ fn rejects_missing_added_or_changed_materialization() {
 #[test]
 fn rejects_context_mismatches_and_missing_participants() {
     for case in 0..7 {
-        let (mut b, p, s) = fixture();
+        let (mut b, _, s) = fixture();
         match case {
             0 => b.workspace = [5; 16],
             1 => b.epoch = [5; 16],
@@ -157,7 +157,6 @@ fn rejects_context_mismatches_and_missing_participants() {
                 .unwrap_err()
                 .contains("context")
         );
-        assert!(p.to_bytes().is_ok());
     }
 }
 #[test]

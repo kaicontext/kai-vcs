@@ -143,9 +143,9 @@ in the adapter required by the specification.
 
 ## Current limits
 
-P0 is **open**. All 19 object types have draft codecs. Embedded manifest profiles,
-capability/outcome review, clean-host extraction qualification, platform fault interfaces,
-broader fixture execution, and independent reviewer approval are still required.
+P0 is **open**. All 19 object types have draft codecs. Profile and
+capability/outcome review, broader clean-host extraction and fixture coverage,
+production platform fault adapters, and independent reviewer approval remain open.
 There is no durable object store, metadata transaction, commit, checkout, remote,
 or migration authority in this increment. Pure object verification does not
 acknowledge a saved revision or certify power-loss durability. All P1–P10 release

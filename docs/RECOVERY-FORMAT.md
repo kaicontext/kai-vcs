@@ -40,7 +40,8 @@ from the ordinary tree. An ordinary file at an ancestor also conflicts with the
 manifest and is rejected. A missing ancestor directory is allowed; unresolved
 paths do not force invalid empty directories into a canonical tree. This check
 is part of closure verification, not mere decoding. Plain source export must
-continue to refuse unresolved revisions; no export is added in this increment.
+continue to refuse unresolved revisions; portable repository recovery preserves
+their alternatives as described in [RECOVERY-EXPORT.md](RECOVERY-EXPORT.md).
 
 ## Checkpoint (type 8)
 
@@ -63,8 +64,9 @@ Paths in the inclusion manifest record an explicit capture choice; they do not
 change privacy. Checkpoints and predecessor history remain private by default.
 Barrier-consistent capture means cooperating writers or a filesystem snapshot;
 it does not necessarily imply live collaboration. A collaboration-barrier ref
-requires capture class 2. Type 17 stays unsupported until its schema is defined,
-so required-closure verification currently refuses checkpoints referencing it.
+requires capture class 2. Type 17 is defined in [CONTROL-FORMAT.md](CONTROL-FORMAT.md);
+closure verification checks the referenced barrier and workspace/tree bindings.
+Live writer coordination remains unimplemented.
 
 ## Operation (type 7)
 

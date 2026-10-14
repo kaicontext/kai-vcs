@@ -81,3 +81,7 @@ names, not instrumented production operations. File flush is not fsync. Process
 kill/restart does **not** establish power-loss durability, atomic root installation,
 or exactly-once transport responses. Those require the P1 storage implementation,
 platform adapters, and later transport runtime. P0 format review remains open.
+
+The fresh-runner recovery report also identifies the failing stage/case,
+exception type, and last attempted command when applicable. Recovery extraction
+preserves archive permission modes independently of the invoking user's umask.

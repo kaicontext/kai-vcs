@@ -150,8 +150,8 @@ mod tests {
     #[test]
     fn reject_wrong_version() {
         // - KAI-OBJECT marker and zero byte.
-        // - Version 1: 00 01.
-        // - Type 2: 00 02—a tree, rather than a blob.
+        // - Version 2: 00 02 (unsupported).
+        // - Type 1: 00 01—a blob.
         // - Payload length 0: eight zero bytes.
         // - No payload.
         let input = b"KAI-OBJECT\x00\x00\x02\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00";

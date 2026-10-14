@@ -86,7 +86,7 @@ impl Bundle {
         for entry in inventory {
             let e = array(entry)?;
             let id = digest(&e[0])?;
-            let ty = uint(&e[1])? as u16;
+            let ty = u16::try_from(uint(&e[1])?).map_err(|_| "inventory type out of range")?;
             let b = framed(&mut cursor)?;
             if b.len() as u64 != uint(&e[2])? || blake3::hash(b).as_bytes() != &id {
                 return Err("inventory size/checksum mismatch".into());
@@ -103,7 +103,7 @@ impl Bundle {
         let mut roots = BTreeMap::new();
         for r in array(&m[&1])? {
             let r = array(r)?;
-            let ty = uint(&r[1])? as u16;
+            let ty = u16::try_from(uint(&r[1])?).map_err(|_| "root type out of range")?;
             roots.insert(digest(&r[0])?, ty);
         }
         if manifest.kind == 16 {
@@ -541,5 +541,76 @@ impl Archive<'_> {
         out.write_all(&[0u8; 1024])
             .and_then(|_| out.flush())
             .map_err(|e| e.to_string())
+    }
+}
+
+#[cfg(test)]
+mod type_range_tests {
+    use super::*;
+
+    fn bundle_with_types(inventory_type: u64, root_type: u64) -> Vec<u8> {
+        let tree = super::super::encode(&Record {
+            kind: 2,
+            payload: Payload::Structured(Value::Array(vec![])),
+        })
+        .unwrap();
+        let id = Value::Array(vec![
+            Value::UInt(1),
+            Value::UInt(1),
+            Value::Bytes(blake3::hash(&tree).as_bytes().to_vec()),
+        ]);
+        let contents = Value::Map(BTreeMap::from([
+            (0, Value::UInt(1)),
+            (
+                1,
+                Value::Array(vec![Value::Array(vec![id.clone(), Value::UInt(root_type)])]),
+            ),
+            (
+                2,
+                Value::Array(vec![Value::Array(vec![
+                    id,
+                    Value::UInt(inventory_type),
+                    Value::UInt(tree.len() as u64),
+                    Value::UInt(1),
+                ])]),
+            ),
+            (3, Value::Array(vec![])),
+            (4, Value::Array(vec![])),
+            (5, Value::Array(vec![])),
+            (6, Value::UInt(1)),
+        ]));
+        let manifest = Value::Map(BTreeMap::from([
+            (0, Value::Bytes(vec![1; 16])),
+            (1, contents),
+        ]));
+        // Deliberately bypass schema validation to construct hostile wire bytes.
+        let mut payload = Vec::new();
+        super::super::emit(&manifest, &mut payload, 0).unwrap();
+        let mut framed = b"KAI-OBJECT\0\0\x01".to_vec();
+        framed.extend(19u16.to_be_bytes());
+        framed.extend((payload.len() as u64).to_be_bytes());
+        framed.extend(payload);
+        let mut bundle = b"KAI-BUNDLE\0\0\x01".to_vec();
+        for object in [framed, tree] {
+            bundle.extend((object.len() as u64).to_be_bytes());
+            bundle.extend(object);
+        }
+        bundle
+    }
+
+    #[test]
+    fn rejects_out_of_range_wire_types_before_narrowing() {
+        assert!(Bundle::read(bundle_with_types(2, 2).as_slice()).is_ok());
+        for oversized in [65536, 65538, 65546, u64::MAX] {
+            for (inventory, root) in [(oversized, 2), (2, oversized), (oversized, oversized)] {
+                let error = Bundle::read(bundle_with_types(inventory, root).as_slice())
+                    .err()
+                    .expect("oversized type must be rejected");
+                assert!(
+                    error.contains("inventory") || error.contains("root"),
+                    "{error}"
+                );
+            }
+        }
     }
 }

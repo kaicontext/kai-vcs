@@ -32,14 +32,25 @@ def frames(data):
 
 
 def drill(report):
+    def begin(stage, case=None):
+        report['stage'] = stage
+        report.pop('command', None)
+        report.pop('case', None)
+        if case is not None:
+            report['case'] = case
+
+    begin('artifact-verification')
     artifacts = Path(__file__).resolve().parent
     require(not (artifacts / 'Cargo.toml').exists(), 'run without a source checkout')
     hashes = json.loads((artifacts / 'sha256.json').read_text())
     for name, expected in hashes.items():
+        report['case'] = name
         require(hashlib.sha256((artifacts / name).read_bytes()).hexdigest() == expected,
                 f'artifact checksum mismatch: {name}')
+    begin('fixture-metadata')
     expected = json.loads((artifacts / 'expected.json').read_text())
     roots = json.loads((artifacts / 'case-roots.json').read_text())
+    begin('reader-setup')
     executable = artifacts / ('kai-bundle-reader.exe' if os.name == 'nt' else 'kai-bundle-reader')
     if os.name != 'nt':
         executable.chmod(0o755)  # Artifact transport does not preserve executable mode.
@@ -51,6 +62,7 @@ def drill(report):
 
     def run(*args, success=True):
         command = [str(executable)] + list(map(str, args))
+        report['command'] = command
         result = subprocess.run(command, cwd=work, env=env, capture_output=True,
                                 text=True, timeout=60)
         require((result.returncode == 0) == success,
@@ -64,7 +76,8 @@ def drill(report):
 
     def extract(archive, destination):
         destination.mkdir()
-        result = subprocess.run([tar, '-xf', str(archive), '-C', str(destination)],
+        report['command'] = [tar, '-xpf', str(archive), '-C', str(destination)]
+        result = subprocess.run(report['command'],
                                 env=env, cwd=work, capture_output=True, text=True, timeout=60)
         require(result.returncode == 0, 'system tar restoration failed: ' + result.stderr)
 
@@ -73,6 +86,7 @@ def drill(report):
         print('PASS:', name, flush=True)
 
     for name in ('repository', 'source'):
+        begin('repository-recovery', name)
         original = (artifacts / f'{name}.kai-bundle').read_bytes()
         copied = work / f'{name}.kai-bundle'
         copied.write_bytes(original)
@@ -100,6 +114,7 @@ def drill(report):
                 require(not bad.exists(), 'unresolved source produced output')
         pass_case(name + ': exact objects, manifest, bundle and index restored')
 
+    begin('source-materialization', 'source')
     source = artifacts / 'source.kai-bundle'
     source_tar = work / 'source-snapshot.tar'
     run(source, '--archive', expected['source_root'], source_tar)
@@ -120,6 +135,7 @@ def drill(report):
     names = {'portable': ['space name.txt', 'n' * 120, 'snowman-\u2603.bin'],
              'raw-name': ['\udcff'], 'control-name': ['line\nbreak', 'tab\tname']}
     for case, expected_names in names.items():
+        begin('path-materialization', case)
         output = work / (case + '.tar')
         run(artifacts / (case + '.kai-bundle'), '--archive', roots[case], output)
         with tarfile.open(output, encoding='utf-8', errors='surrogateescape') as archive:
@@ -137,6 +153,7 @@ def drill(report):
         pass_case(case + ': exact archive names/bytes' + (' and materialization' if materialize else ''))
 
     for case in ('reserved', 'metadata-alias', 'case-collision', 'normalization-collision'):
+        begin('unsafe-path-rejection', case)
         bundle = artifacts / (case + '.kai-bundle')
         run(bundle)
         output = work / (case + '-refused.tar')
@@ -144,6 +161,7 @@ def drill(report):
         require(not output.exists(), 'unsafe path preflight left output')
         pass_case(case + ': source preflight refused before output')
     for case in ('missing', 'incremental'):
+        begin('incomplete-bundle-rejection', case)
         output = work / (case + '-refused.tar')
         run(artifacts / (case + '.kai-bundle'), '--recover', output, success=False)
         require(not output.exists(), 'incomplete bundle left output')
@@ -154,28 +172,32 @@ def drill(report):
                  'missing-last-frame': original[:-(len(frames(original)[-1]) + 8)],
                  'trailing-data': original + b'x'}
     for name, data in mutations.items():
+        begin('corruption-rejection', name)
         bundle = work / (name + '.kai-bundle')
         bundle.write_bytes(data)
         output = work / (name + '-refused.tar')
         run(bundle, '--recover', output, success=False)
         require(not output.exists(), 'invalid bundle left output')
         pass_case(name + ': recovery refused before output')
+    begin('overwrite-refusal', 'partial-output')
     partial = work / 'partial.tar'
     partial.write_bytes(b'partial prior interrupted export')
     run(source, '--recover', partial, success=False)
     require(partial.read_bytes() == b'partial prior interrupted export', 'partial export overwritten')
     pass_case('existing partial export preserved; no implicit overwrite/resume')
     report['limitations'].append('Injected Rust writer failures cover short/zero/broken-pipe/flush failures; process-kill/power-loss recovery is not certified.')
-    report['status'] = 'passed'
+    report.update(status='passed', stage='complete')
+    report.pop('case', None)
+    report.pop('command', None)
 
 
 def main():
     report = {'status': 'failed', 'platform': platform.platform(), 'python': sys.version,
-              'passed': [], 'limitations': []}
+              'passed': [], 'limitations': [], 'stage': 'initialization'}
     try:
         drill(report)
     except Exception as error:
-        report['error'] = str(error)
+        report['error'] = {'type': type(error).__name__, 'message': str(error)}
         print('FAIL:', error, file=sys.stderr)
     finally:
         destination = Path(__file__).resolve().parent / 'recovery-report.json'

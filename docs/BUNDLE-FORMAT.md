@@ -65,5 +65,6 @@ and binary bytes, modes, nesting and symlink target. The Unix integration test
 also restores GNU long names and long symlink targets. Non-UTF-8 archive bytes are
 checked on every platform; the actual raw-name restore assertion runs on Linux.
 The current Mac filesystem rejected a raw 0xff filename, so no raw-name restore
-success is claimed there. CI includes Linux/macOS/Windows, but remote results and
-clean-host qualification have not been observed for this increment.
+success is claimed there. Linux/macOS/Windows conformance and fresh-runner recovery checks have passed;
+see [validation results](MIGRATION.md#validation). Broader T012 acceptance and
+platform materialization coverage remain open.
