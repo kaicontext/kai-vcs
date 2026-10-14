@@ -342,6 +342,36 @@ operation-log encoding/replay, namespace convergence, successor epochs, retired
 replicas and compaction proofs remain protocol work. No live collaboration or
 production publication gate is claimed. Tests were local; P0 remains open.
 
+## Independent source bundle/extractor increment — 2026-10-14
+
+Added a documented versioned standalone transfer container and independent
+`kai-bundle-reader`, without linking the production crate. It checks inventory
+checksums/lengths, typed source closure, complete parent ancestry, owner/envelope
+kind binding, and assembled large-file digest. Selected tree/revision/tag snapshots
+export as deterministic tar archives with exact bytes, modes and symlink targets.
+All verification and export preflight precede output creation; existing outputs
+are refused. A production-encoder example generates a reproducible source bundle.
+
+- **130 Rust tests passed locally**, including ten source-bundle tests and one
+  standalone CLI test. Tests cover corruption/truncation/trailing data, missing/
+  mistyped/opaque required objects, prerequisites/features, complete ancestry,
+  tag selection, paths/aliases, raw and long names, large-blob assembly, logical
+  budgets, actual tar restoration and refusal to overwrite existing output.
+- Workspace Clippy (warnings denied), formatting and whitespace checks passed.
+- Restored the example with system tar; exact binary/text/script bytes, 0644/0755
+  modes, nested directory and symlink target matched. Unix long-name/link restore
+  passes. Actual non-UTF-8 filename restore is Linux-only: this Mac filesystem
+  refused it. Raw-name archive bytes are still verified locally.
+- Evidence: `checks/p0-bundle-tests.log`, `checks/p0-bundle-clippy.log`,
+  `checks/p0-bundle-restore.log`, `checks/p0-bundle-sources.sha256`.
+
+Scope is bounded standalone **source-history** bundles. Full view/checkpoint/
+conflict/metadata/backup extraction is not implemented. Unsupported interpreted
+objects and unresolved revisions fail closed; Gitlink bundles verify but cannot
+be exported as ordinary filesystem tar snapshots. Source export is not repository
+restore, durable backup, or race-resistant checkout. P0 and clean-host T012 remain
+open; tests are local and remote CI has not been checked.
+
 ## Next P0 work
 
 1. Review the proposed capability/outcome contracts against storage and transport
@@ -349,7 +379,8 @@ production publication gate is claimed. Tests were local; P0 remains open.
 2. Review evidence/frontier profile completeness and protocol binding, evidence
    applicability and signed-payload interoperability. Resolve remaining
    size/streaming and submap choices before freeze.
-3. Extend the independent reader to complete bundle/source extraction.
+3. Extend independent extraction from source-history bundles to full repository
+   metadata/backup roots and conflicted-state preservation; qualify clean-host T012.
 4. Add F01–F07 generators with byte/kind manifests and deterministic seeds.
 5. Define fault-injection/platform interfaces and record ADR review for the native
    authority boundary and MIT preservation-kernel licensing.

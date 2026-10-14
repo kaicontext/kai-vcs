@@ -40,8 +40,11 @@ gates. This is an experimental preservation kernel, not a replacement CLI yet.
   differential tests, and a small independent transaction/retention oracle.
 
 The reader has **no dependency on the production crate**. It can inspect an
-individual canonical object and extract raw blob/chunk bytes. Complete bundle
-and history extraction (T012) has not been implemented.
+individual canonical object and extract raw blob/chunk bytes. The new
+`kai-bundle-reader` independently verifies bounded standalone source-history
+bundles and exports selected resolved snapshots as tar archives. Full repository
+metadata/backup extraction and clean-host T012 qualification remain open. See
+[BUNDLE-FORMAT.md](docs/BUNDLE-FORMAT.md) for supported types and limits.
 
 ```sh
 cargo test --workspace --locked # Includes tests against installed upstream Git
@@ -60,6 +63,42 @@ diff tests/fixtures/objects.tsv /tmp/kai-vectors.tsv
 cargo run -p kai-object-reference --example vectors -- --signing-payloads > /tmp/kai-signing.tsv
 diff tests/fixtures/attestation-payloads.tsv /tmp/kai-signing.tsv
 ```
+
+## Watch the ASCII demo
+
+```sh
+python3 tools/demo/ascii_movie.py
+```
+
+A short terminal movie runs the real Rust sample: bundle creation, independent
+verification, exact archive restoration, then rejection of a deliberately corrupted
+copy. It uses a fresh temporary directory and retains the restored files and command
+log. Requires Python 3, Cargo with cached dependencies, and a capable POSIX tar tool.
+Use `--fast` to skip animation, `--record /tmp/kai-demo.cast` to save a recording,
+or `--replay /tmp/kai-demo.cast` to watch that recording without rerunning Rust.
+
+## Try a complete source bundle
+
+Run from the repository root. The example creates synthetic source, not a capture
+of your working checkout. It prints the selected tree ID. The reader verifies all
+bundled source objects before creating a new archive; it refuses existing outputs.
+
+```sh
+demo_dir=$(mktemp -d)
+root_id=$(cargo run --locked --offline --example source_bundle -- "$demo_dir/source.kai-bundle")
+cargo run --locked --offline -p kai-object-reference --bin kai-bundle-reader -- "$demo_dir/source.kai-bundle"
+cargo run --locked --offline -p kai-object-reference --bin kai-bundle-reader -- "$demo_dir/source.kai-bundle" --archive "$root_id" "$demo_dir/source.tar"
+mkdir "$demo_dir/restored"
+tar -xf "$demo_dir/source.tar" -C "$demo_dir/restored"
+ls -l "$demo_dir/restored"
+```
+
+The restored example has `hello.txt`, executable `run.sh`, `data/bytes.bin`, and
+`hello-link` pointing to `hello.txt`. Archive export runs no saved scripts or hooks.
+Restoration requires a tar tool/filesystem capable of the saved kinds and names.
+Gitlinks, conflicted revisions, incremental bundles and unsupported interpreted
+metadata are explicit refusals in this reader version. This is source export,
+not repository initialization or a durable backup service.
 
 ## Compatibility
 

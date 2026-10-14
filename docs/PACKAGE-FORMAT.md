@@ -68,7 +68,9 @@ lease can establish that it was actually committed. No newest-timestamp recovery
 `verify_package` returns `StandaloneVerified` or `IncrementalVerified` only after
 all object bytes, declared features, required closure, and backup linkage pass.
 Neither is a durable-backup acknowledgment, full Git-mapping validation or external
-payload completeness claim. Server authorization/configuration, encryption-key
-recovery, on-disk containers, resumable transport, durable leases, restore writes,
-and clean-host restore/export drills remain subsequent work. A decoded standalone
+payload completeness claim. The draft [source bundle container](BUNDLE-FORMAT.md)
+now supports bounded independent source verification and tar export. Full backup
+containers, server authorization/configuration, encryption-key recovery, resumable
+transport, durable leases, restore writes, and clean-host qualification remain
+subsequent work. A decoded standalone
 claim alone must never be displayed as a verified complete backup.
