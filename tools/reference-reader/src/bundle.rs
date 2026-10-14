@@ -477,14 +477,53 @@ fn long(out: &mut impl Write, data: &[u8], ty: u8) -> Result<(), String> {
         .map_err(|e| e.to_string())?;
     pad(out, (data.len() + 1) as u64)
 }
+// POSIX pax path/linkpath values are explicitly UTF-8, unlike legacy tar names.
+fn pax_field(data: &mut Vec<u8>, key: &str, value: &[u8]) {
+    let body = key.len() + value.len() + 2; // equals sign and final newline
+    let mut length = body + 2;
+    loop {
+        let next = body + 1 + length.to_string().len();
+        if next == length {
+            break;
+        }
+        length = next;
+    }
+    data.extend(format!("{length} {key}=").as_bytes());
+    data.extend(value);
+    data.push(b'\n');
+}
+fn unicode_field(value: &[u8]) -> bool {
+    !value.is_ascii() && std::str::from_utf8(value).is_ok()
+}
 impl Archive<'_> {
     pub fn write(&self, mut out: impl Write) -> Result<(), String> {
         for e in &self.entries {
-            if e.path.len() > 100 {
+            let path_utf8 = unicode_field(&e.path);
+            let link_utf8 = unicode_field(&e.link);
+            if e.path.len() > 100 && !path_utf8 {
                 long(&mut out, &e.path, b'L')?;
             }
-            if e.link.len() > 100 {
+            if e.link.len() > 100 && !link_utf8 {
                 long(&mut out, &e.link, b'K')?;
+            }
+            let mut extended = Vec::new();
+            if path_utf8 {
+                pax_field(&mut extended, "path", &e.path);
+            }
+            if link_utf8 {
+                pax_field(&mut extended, "linkpath", &e.link);
+            }
+            if !extended.is_empty() {
+                header(
+                    &mut out,
+                    b"PaxHeaders/kai",
+                    0o644,
+                    extended.len() as u64,
+                    b'x',
+                    &[],
+                )?;
+                out.write_all(&extended).map_err(|e| e.to_string())?;
+                pad(&mut out, extended.len() as u64)?;
             }
             let (mode, ty) = match e.kind {
                 1 => (0o644, b'0'),

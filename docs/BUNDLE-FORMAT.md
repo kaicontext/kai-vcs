@@ -40,8 +40,9 @@ exclusively only after complete verification and export preflight. Existing file
 are never overwritten. I/O failure may leave a partial new archive, reported as an
 error; this is not a durable transaction or backup acknowledgment.
 
-Archives use POSIX ustar headers and GNU long-name/long-link extensions as needed;
-raw path/link bytes are retained. Files use modes 0644/0755; directories 0755 and
+Archives use POSIX ustar headers, POSIX pax UTF-8 path/linkpath records for
+non-ASCII valid UTF-8 values, and GNU long-name/long-link extensions for remaining
+long values. Raw path/link bytes are retained without normalization. Files use modes 0644/0755; directories 0755 and
 symlinks 0777. uid/gid/mtime are deterministic zero. Symlinks are emitted last, so
 no later entry traverses an earlier symlink. Targets may be absolute or dangling;
 they are stored without access. Gitlinks refuse archive export because an ordinary

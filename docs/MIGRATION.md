@@ -422,7 +422,10 @@ unresolved state and refusal to overwrite existing partial output. Rust writer
 fault injection verifies exact prefixes and errors for short/zero/broken-pipe
 writes and flush failures; source and recovery exporters are both exercised.
 
-- **140 Rust tests passed locally**, plus Clippy (warnings denied) and formatting.
+- **141 Rust tests passed locally**, plus Clippy (warnings denied) and formatting.
+- The first fresh Windows run exposed legacy tar Unicode decoding ambiguity.
+  Added POSIX pax UTF-8 path/linkpath fields and a byte-length regression test;
+  native object IDs are unchanged and raw non-UTF-8 archive names remain exact.
 - Local macOS harness: **19 passed cases**, with raw-name materialization and
   process-kill/power-loss qualification explicitly outstanding.
 - CI workflow: `.github/workflows/recovery.yml`; fresh runner reports are uploaded

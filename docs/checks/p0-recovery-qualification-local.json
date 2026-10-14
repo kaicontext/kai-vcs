@@ -27,6 +27,6 @@
     "raw-name: archive bytes verified; filesystem materialization not qualified on darwin.",
     "Injected Rust writer failures cover short/zero/broken-pipe/flush failures; process-kill/power-loss recovery is not certified."
   ],
-  "work_directory": "/var/folders/5_/mxqc15bj5mb2y9p8bf5mmgz80000gn/T/kai-qualification-mgg8o980",
+  "work_directory": "/var/folders/5_/mxqc15bj5mb2y9p8bf5mmgz80000gn/T/kai-qualification-cra_6ciu",
   "reader_environment": "empty PATH; isolated HOME; no Cargo/Git/helper access"
 }

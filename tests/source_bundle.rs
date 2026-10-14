@@ -427,3 +427,41 @@ fn support_object() -> Object {
         predecessor: None,
     }))
 }
+
+#[test]
+fn unicode_path_and_link_use_byte_counted_pax_records_without_normalization() {
+    let mut s = Store::new();
+    let target = "e\u{0301}\n".repeat(40);
+    let link = put(
+        &mut s,
+        Object::Blob(Blob {
+            data: target.as_bytes().to_vec(),
+        }),
+    );
+    let name = "snowman-\u{2603}\nlink";
+    let root = tree(&mut s, vec![(name.as_bytes(), EntryKind::Symlink, link)]);
+    let tar = archive(&s, root).unwrap();
+    assert_eq!(tar[156], b'x');
+    let length = usize::from_str_radix(std::str::from_utf8(&tar[124..135]).unwrap(), 8).unwrap();
+    let data = &tar[512..512 + length];
+    let mut pos = 0;
+    let mut values = Vec::new();
+    while pos < data.len() {
+        let space = data[pos..].iter().position(|b| *b == b' ').unwrap() + pos;
+        let n: usize = std::str::from_utf8(&data[pos..space])
+            .unwrap()
+            .parse()
+            .unwrap();
+        assert_eq!(data[pos + n - 1], b'\n');
+        values.push(data[space + 1..pos + n - 1].to_vec());
+        pos += n;
+    }
+    assert_eq!(pos, data.len());
+    assert_eq!(
+        values,
+        vec![
+            format!("path={name}").into_bytes(),
+            format!("linkpath={target}").into_bytes()
+        ]
+    );
+}

@@ -92,3 +92,10 @@ python3 /tmp/kai-recovery-inputs/recover.py
 The destination must not already exist. Default preparation pins Rust 1.99.0 as in
 CI. The harness retains temporary files and writes `recovery-report.json` beside
 its downloaded artifacts, including errors if a step fails.
+
+The initial Windows run exposed ambiguous Unicode encoding in legacy tar headers.
+Source export now emits POSIX pax `path`/`linkpath` records for valid non-ASCII
+UTF-8 values. The records use byte-counted lengths, preserve embedded newlines and
+normalization, and leave non-UTF-8 raw names unchanged. This follows libarchive's
+[documented pax encoding](https://github.com/libarchive/libarchive/blob/master/libarchive/tar.5).
+The Unicode materialization assertion remains mandatory on every runner.
