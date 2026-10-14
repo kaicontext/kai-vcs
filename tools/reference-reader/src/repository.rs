@@ -39,6 +39,12 @@ impl Bundle {
                 }
             }
             6 => {
+                if uint(&m[&5])? == 1 {
+                    for entry in array(&m[&1])? {
+                        add(&array(entry)?[1], &[6])?;
+                    }
+                    return Ok(edges);
+                }
                 for entry in array(&m[&1])? {
                     let r = array(entry)?;
                     let name = bytes(&r[0])?;
@@ -132,6 +138,15 @@ impl Bundle {
         Ok(edges)
     }
     pub(super) fn verify_repository_bindings(&self, work: &mut usize) -> Result<(), String> {
+        let mut buckets = BTreeMap::new();
+        for (id, r) in &self.records {
+            if r.kind == 6 {
+                let Payload::Structured(v) = &r.payload else {
+                    unreachable!()
+                };
+                buckets.insert(*id, super::view::submap_bucket(v)?);
+            }
+        }
         for r in std::iter::once(&self.manifest).chain(self.records.values()) {
             if !matches!(r.kind, 3 | 6 | 8 | 9 | 16) {
                 continue;
@@ -144,6 +159,16 @@ impl Bundle {
                     }
                 }
                 6 => {
+                    if uint(&m[&5])? == 1 {
+                        for entry in array(&m[&1])? {
+                            let pair = array(entry)?;
+                            let expected = uint(&pair[0])? as u8;
+                            if buckets.get(&digest(&pair[1])?) != Some(&Some(expected)) {
+                                return Err("invalid view submap binding".into());
+                            }
+                        }
+                        continue;
+                    }
                     for draft in array(&m[&2])? {
                         let d = array(draft)?;
                         for head in array(&d[1])? {
@@ -376,6 +401,20 @@ impl Bundle {
                 }
                 6 => {
                     line(&mut out, format!("  view generation={}", uint(&m[&0])?))?;
+                    if uint(&m[&5])? == 1 {
+                        for entry in array(&m[&1])? {
+                            let pair = array(entry)?;
+                            line(
+                                &mut out,
+                                format!(
+                                    "  submap bucket={} view={}",
+                                    uint(&pair[0])?,
+                                    id_text(&pair[1])?
+                                ),
+                            )?;
+                        }
+                        continue;
+                    }
                     for v in array(&m[&1])? {
                         let r = array(v)?;
                         let state = array(&r[2])?;

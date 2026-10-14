@@ -580,6 +580,72 @@ fn main() {
             },
         ),
     ]);
+    vectors.push((
+        "view-partitioned-empty",
+        Record {
+            kind: 6,
+            payload: Payload::Structured(m(vec![(0, UInt(0)), (1, Array(vec![])), (5, UInt(1))])),
+        },
+    ));
+    vectors.push((
+        "view-partitioned-boundaries",
+        Record {
+            kind: 6,
+            payload: Payload::Structured(m(vec![
+                (0, UInt(u64::MAX)),
+                (
+                    1,
+                    Array(vec![
+                        Array(vec![UInt(0), r(0x11)]),
+                        Array(vec![UInt(255), r(0x22)]),
+                    ]),
+                ),
+                (5, UInt(1)),
+            ])),
+        },
+    ));
+    let leaf = Record {
+        kind: 6,
+        payload: Payload::Structured(m(vec![
+            (0, UInt(0)),
+            (
+                1,
+                Array(vec![Array(vec![
+                    b(b"branches/main"),
+                    UInt(1),
+                    Array(vec![UInt(0)]),
+                ])]),
+            ),
+            (2, Array(vec![])),
+            (3, Array(vec![])),
+            (4, Array(vec![])),
+            (5, UInt(0)),
+        ])),
+    };
+    let leaf_bytes = encode(&leaf).unwrap();
+    let digest = blake3::hash(&leaf_bytes);
+    let mut key = b"KAI-VIEW-BUCKET\0".to_vec();
+    key.push(1);
+    key.extend(b"branches/main");
+    let bucket = blake3::hash(&key).as_bytes()[0];
+    vectors.push(("view-submap", leaf));
+    vectors.push((
+        "view-partitioned-single",
+        Record {
+            kind: 6,
+            payload: Payload::Structured(m(vec![
+                (0, UInt(7)),
+                (
+                    1,
+                    Array(vec![Array(vec![
+                        UInt(u64::from(bucket)),
+                        Array(vec![UInt(1), UInt(1), b(digest.as_bytes())]),
+                    ])]),
+                ),
+                (5, UInt(1)),
+            ])),
+        },
+    ));
     let signing = std::env::args().any(|arg| arg == "--signing-payloads");
     if !signing {
         println!("# name\tframed_hex\tobject_id");
