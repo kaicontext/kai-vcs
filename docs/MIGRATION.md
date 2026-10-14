@@ -407,6 +407,39 @@ fixture/fault harnesses and independent review remain open. The local isolated
 Mac drill is not a substitute for those acceptance gates. New work is local;
 the preceding source reader and ASCII demo were pushed as `2113f88`.
 
+## Recovery qualification harness — 2026-10-14
+
+Added a dedicated Linux/macOS/Windows build-and-recovery workflow. A separate
+fresh recovery runner receives only the standalone binary, deterministic bundles,
+expected fixture identities, transport hashes and a standard-library harness;
+there is no checkout or Rust installation. Reader subprocesses use empty PATH and
+isolated HOME. Reports preserve passed cases and explicit platform limitations.
+
+Added deterministic portable/raw/control/reserved/colliding path fixtures and
+missing/incremental closures. The harness checks exact portable repository/object
+and source recovery, aliases, corrupt/truncated/missing frames, trailing bytes,
+unresolved state and refusal to overwrite existing partial output. Rust writer
+fault injection verifies exact prefixes and errors for short/zero/broken-pipe
+writes and flush failures; source and recovery exporters are both exercised.
+
+- **140 Rust tests passed locally**, plus Clippy (warnings denied) and formatting.
+- Local macOS harness: **19 passed cases**, with raw-name materialization and
+  process-kill/power-loss qualification explicitly outstanding.
+- CI workflow: `.github/workflows/recovery.yml`; fresh runner reports are uploaded
+  as `recovery-report-ubuntu-latest`, `recovery-report-macos-latest`, and
+  `recovery-report-windows-latest`. Consult the run/artifacts for remote outcomes;
+  local results alone do not imply remote success.
+- Evidence: `checks/p0-recovery-qualification-tests.log`,
+  `checks/p0-recovery-qualification-clippy.log`,
+  `checks/p0-recovery-qualification-local.json`,
+  `checks/p0-recovery-qualification-sources.sha256`.
+
+This covers a bounded hosted-runner recovery drill, not all T012 fixtures or P0
+completion. Windows executable/symlink materialization, non-Linux raw filenames,
+crash/durability qualification, full F01–F07 generators and independent reviewer
+signoff remain gaps. The preceding repository recovery implementation was pushed
+as `63f9d24` before this increment.
+
 ## Next P0 work
 
 1. Review the proposed capability/outcome contracts against storage and transport

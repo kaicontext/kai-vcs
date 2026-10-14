@@ -300,3 +300,76 @@ fn nested_backup_and_transfer_records_keep_their_typed_roots() {
     add(&mut f, Object::TransferManifest(Box::new(transfer)));
     assert!(read(&f).is_ok());
 }
+
+struct FailingWriter {
+    remaining: usize,
+    bytes: Vec<u8>,
+    flush_fails: bool,
+    zero: bool,
+}
+impl std::io::Write for FailingWriter {
+    fn write(&mut self, b: &[u8]) -> std::io::Result<usize> {
+        if self.remaining == 0 {
+            return if self.zero {
+                Ok(0)
+            } else {
+                Err(std::io::Error::new(
+                    std::io::ErrorKind::BrokenPipe,
+                    "injected write failure",
+                ))
+            };
+        }
+        let n = b.len().min(self.remaining);
+        self.bytes.extend(&b[..n]);
+        self.remaining -= n;
+        Ok(n)
+    }
+    fn flush(&mut self) -> std::io::Result<()> {
+        if self.flush_fails {
+            Err(std::io::Error::other("injected flush failure"))
+        } else {
+            Ok(())
+        }
+    }
+}
+#[test]
+fn recovery_write_failures_never_report_success_and_leave_only_exact_prefixes() {
+    let f = fixture();
+    let b = read(&f).unwrap();
+    let archive = b.recovery().unwrap();
+    let mut complete = Vec::new();
+    archive.write(&mut complete).unwrap();
+    for cut in [0, 1, 511, 512, 1025, complete.len() - 1] {
+        for zero in [false, true] {
+            let mut sink = FailingWriter {
+                remaining: cut,
+                bytes: vec![],
+                flush_fails: false,
+                zero,
+            };
+            assert!(archive.write(&mut sink).is_err());
+            assert_eq!(sink.bytes, &complete[..cut]);
+        }
+    }
+    let mut sink = FailingWriter {
+        remaining: usize::MAX,
+        bytes: vec![],
+        flush_fails: true,
+        zero: false,
+    };
+    assert!(archive.write(&mut sink).is_err());
+    assert_eq!(sink.bytes, complete);
+    let source = b.archive(&f.resolved.to_string()).unwrap();
+    let mut complete = Vec::new();
+    source.write(&mut complete).unwrap();
+    for cut in [0, 513, complete.len() - 1] {
+        let mut sink = FailingWriter {
+            remaining: cut,
+            bytes: vec![],
+            flush_fails: false,
+            zero: false,
+        };
+        assert!(source.write(&mut sink).is_err());
+        assert_eq!(sink.bytes, &complete[..cut]);
+    }
+}

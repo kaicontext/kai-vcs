@@ -44,7 +44,8 @@ individual canonical object and extract raw blob/chunk bytes. The new
 `kai-bundle-reader` independently verifies bounded standalone source-history
 bundles and exports resolved snapshots as tar archives. It also recovers complete
 portable backup state, including refs, workspaces, conflicts and metadata. Live
-database installation and clean-host T012 qualification remain open. See
+database installation and full T012 qualification remain open. A separate
+three-platform workflow tests recovery on fresh runners without a checkout. See
 [BUNDLE-FORMAT.md](docs/BUNDLE-FORMAT.md) for supported types and limits.
 
 ```sh

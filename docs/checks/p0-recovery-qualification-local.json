@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "platform": "macOS-26.3-arm64-arm-64bit-Mach-O",
+  "python": "3.14.5 (v3.14.5:5607950ef23, May 10 2026, 07:38:09) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "passed": [
+    "repository: exact objects, manifest, bundle and index restored",
+    "source: exact objects, manifest, bundle and index restored",
+    "POSIX executable and symlink materialization",
+    "executable, symlink and binary archive fidelity",
+    "portable: exact archive names/bytes and materialization",
+    "raw-name: exact archive names/bytes",
+    "control-name: exact archive names/bytes and materialization",
+    "reserved: source preflight refused before output",
+    "metadata-alias: source preflight refused before output",
+    "case-collision: source preflight refused before output",
+    "normalization-collision: source preflight refused before output",
+    "missing: incomplete recovery refused",
+    "incremental: incomplete recovery refused",
+    "corrupt: recovery refused before output",
+    "truncated-header: recovery refused before output",
+    "truncated-object: recovery refused before output",
+    "missing-last-frame: recovery refused before output",
+    "trailing-data: recovery refused before output",
+    "existing partial export preserved; no implicit overwrite/resume"
+  ],
+  "limitations": [
+    "raw-name: archive bytes verified; filesystem materialization not qualified on darwin.",
+    "Injected Rust writer failures cover short/zero/broken-pipe/flush failures; process-kill/power-loss recovery is not certified."
+  ],
+  "work_directory": "/var/folders/5_/mxqc15bj5mb2y9p8bf5mmgz80000gn/T/kai-qualification-mgg8o980",
+  "reader_environment": "empty PATH; isolated HOME; no Cargo/Git/helper access"
+}

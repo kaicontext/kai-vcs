@@ -54,3 +54,41 @@ separate from opaque metadata preservation and native closure verification.
 
 Clean-directory and standalone-binary drills provide local evidence. A genuinely
 clean-host/platform qualification and independent review remain P0 acceptance work.
+
+## Automated independent recovery qualification
+
+The `Independent recovery qualification` workflow builds deterministic fixtures
+and the standalone reader on Linux, macOS and Windows, then passes only those
+artifacts and a Python standard-library harness to separate fresh runner jobs.
+Recovery jobs do not check out the repository or install Rust. Reader subprocesses
+run with empty PATH and isolated HOME, without Cargo, Git or external helpers.
+System tar and Python inspect/restore output independently. Artifact checksums
+protect transport; semantic checks compare exact objects, bundle framing, expected
+source bytes, refs/conflict state and file/archive metadata.
+
+The harness covers missing/incremental/corrupt/truncated/trailing-data packages,
+reserved/metadata/case/normalization path aliases, raw/control/long/Unicode names,
+existing partial outputs, full portable metadata recovery and unresolved-source
+refusal. Rust fault injection checks failed/zero/short writes and flush failures
+at multiple byte boundaries; every failed export returns an error and any bytes
+written are exactly a prefix of the expected archive. This is not a process-kill,
+filesystem-crash, power-loss or durable-store certification.
+
+Each OS uploads `recovery-report-<os>` with passed cases and explicit limitations:
+Windows checks executable/symlink metadata in the archive without certifying
+native materialization; raw POSIX name restoration is tested on Linux, while
+other platforms verify exact archive bytes. Control-character names are restored
+on POSIX only. These omissions are not reported as successful materialization.
+The workflow exercises isolated recovery on fresh hosted runners, not all F01–F07
+fixtures, every filesystem or the full T012/P0 acceptance gate.
+
+To reproduce locally with the installed stable toolchain (Python 3, Cargo and tar):
+
+```sh
+python3 tools/qualification/prepare.py /tmp/kai-recovery-inputs --toolchain stable
+python3 /tmp/kai-recovery-inputs/recover.py
+```
+
+The destination must not already exist. Default preparation pins Rust 1.99.0 as in
+CI. The harness retains temporary files and writes `recovery-report.json` beside
+its downloaded artifacts, including errors if a step fails.

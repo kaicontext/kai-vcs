@@ -1,0 +1,45 @@
+name: Independent recovery qualification
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  prepare:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install tested Rust toolchain
+        run: rustup toolchain install 1.99.0 --profile minimal
+      - name: Build standalone reader and deterministic fixtures
+        run: python tools/qualification/prepare.py recovery-artifacts
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: recovery-input-${{ matrix.os }}
+          path: recovery-artifacts/
+          if-no-files-found: error
+          retention-days: 7
+  recover:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      # Deliberately no checkout and no Rust installation in this job.
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: recovery-input-${{ matrix.os }}
+          path: recovery-artifacts
+      - name: Recover with copied binary, empty PATH and isolated HOME
+        run: python recovery-artifacts/recover.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: recovery-report-${{ matrix.os }}
+          path: recovery-artifacts/recovery-report.json
+          if-no-files-found: error
+          retention-days: 30
