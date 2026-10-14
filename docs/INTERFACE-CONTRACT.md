@@ -9,6 +9,10 @@ Cross-field and canonical ordering rules below require semantic validation as we
 The shared accepted/rejected corpus is `tests/fixtures/interface.json`; the separate
 stdlib-only checker is `tools/interface-reference/check.py`.
 No current runtime capabilities or durability guarantees are advertised by default.
+The [native object-frame profile](TRANSFER-FRAMING.md) consumes negotiated limits
+for protocol 1, `native-v1-blake3`, and compression `none`. Object limits include
+the canonical envelope; frame limits include the additional 95-byte wire header.
+Session authentication and request dispatch remain unimplemented.
 
 JSON records are at most 1 MiB, use UTF-8, reject unknown/duplicate fields, and
 contain exactly one value (trailing whitespace is allowed). Optional fields may be
