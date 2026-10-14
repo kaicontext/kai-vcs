@@ -422,3 +422,5 @@ pub fn attestation_signing_payload(input: &[u8]) -> Result<Vec<u8>, String> {
 pub mod bundle;
 
 mod repository;
+
+pub mod transfer;

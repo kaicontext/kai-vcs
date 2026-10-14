@@ -32,7 +32,8 @@ jobs:
         run: |
           cargo +1.99.0 run --locked -p kai-object-reference --example vectors > tests/fixtures/objects.tsv
           cargo +1.99.0 run --locked -p kai-object-reference --example vectors -- --signing-payloads > tests/fixtures/attestation-payloads.tsv
-          git diff --exit-code -- tests/fixtures/objects.tsv tests/fixtures/attestation-payloads.tsv
+          cargo +1.99.0 run --locked -p kai-object-reference --example vectors -- --transfer-frames > tests/fixtures/transfer-frames.tsv
+          git diff --exit-code -- tests/fixtures/objects.tsv tests/fixtures/attestation-payloads.tsv tests/fixtures/transfer-frames.tsv
       - name: Build process fault tools
         run: cargo +1.99.0 build --workspace --bins --locked
       - name: Generate acceptance fixtures
