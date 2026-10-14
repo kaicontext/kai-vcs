@@ -13,7 +13,7 @@ checkpoint = {
 }
 operation = {
   0: bstr .size 16, 1: [* native], 2: native, 3: native, 4: bstr,
-  5: identity, 6: int, 7: int, 8: [* bstr .size 16], 9: bstr .size 16,
+  5: identity, 6: signed64, 7: signed64, 8: [* bstr .size 16], 9: bstr .size 16,
   ?10: [+ bstr]
 }
 tag = {0: native, 1: bstr, 2: identity, ?3: native}

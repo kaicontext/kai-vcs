@@ -18,4 +18,6 @@ sha2 = "0.10"
 unicode-normalization = "0.1.24"
 
 [dev-dependencies]
+cddl = { version = "=0.10.7", default-features = false, features = ["cbor", "json", "additional-controls", "ast-span", "ast-comments", "ast-parent"] }
+ciborium = "=0.2.2"
 kai-object-reference = { path = "tools/reference-reader" }

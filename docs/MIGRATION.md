@@ -82,6 +82,11 @@ from the review tree and remain available in earlier Git commits.
 
 ## Next P0 work
 
+Executable [schema validation](SCHEMA-VALIDATION.md) now checks all 19 types and
+explicit integer ranges against both codecs. This closes the identified numeric
+schema mismatch; view submap encoding, protocol/profile decisions and independent
+approvals remain open. No format freeze or P0 exit is declared.
+
 1. Review capability/outcome contracts against storage and transport needs;
    define remaining versioned request/session framing.
 2. Review evidence/frontier completeness, protocol binding, applicability and

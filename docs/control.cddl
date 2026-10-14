@@ -1,6 +1,6 @@
 ; Load alongside schemas.cddl; semantic rules in CONTROL-FORMAT.md.
-collaboration-barrier = {0: bstr .size 16, 1: bstr .size 16, 2: uint,
-  3: native, 4: bstr, 5: [+ [bstr .size 16, uint]],
+collaboration-barrier = {0: bstr .size 16, 1: bstr .size 16, 2: unsigned64,
+  3: native, 4: bstr, 5: [+ [bstr .size 16, unsigned64]],
   6: [* [bstr .size 16, bstr]], 7: native, 8: bstr}
-policy = {0: bstr .size 16, 1: uint, 2: [* bstr], 3: [* bstr],
-  4: uint, 5: [* bstr], 6: 1..3, 7: 1..2, 8: [* bstr], ?9: native}
+policy = {0: bstr .size 16, 1: positive64, 2: [* bstr], 3: [* bstr],
+  4: unsigned64, 5: [* bstr], 6: 1..3, 7: 1..2, 8: [* bstr], ?9: native}

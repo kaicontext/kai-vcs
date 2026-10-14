@@ -27,6 +27,17 @@ fields are allowed. Optional fields are omitted; explicit null is not equivalent
 and is rejected. Empty optional collections are omitted (not encoded as empty).
 Names/messages/identities are bytes, not text. See `schemas.cddl`.
 
+All CDDL registries share explicit `signed64`, `unsigned64`, and `positive64`
+ranges. Timestamps and exit statuses use signed i64; counters use unsigned u64,
+with positive-only ref generations, policy revisions and attestation versions.
+Large-blob lengths start at 16 MiB + 1. Raw blob/chunk size rules describe the
+payload bytes; these two object types still carry raw bytes, not CBOR strings.
+
+[Executable schema checks](SCHEMA-VALIDATION.md) validate all published object
+vectors and numeric boundaries against the CDDL files and both codecs. Structural
+CDDL validation supplements canonical encoding, semantic and closure checks;
+it cannot replace them.
+
 ## Type registry
 
 | Code | Type | Codec status |
