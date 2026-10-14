@@ -1,0 +1,2 @@
+# Pinned byte corpus: checkout must not translate line endings on any host.
+tools/fixtures/corpus/* -text

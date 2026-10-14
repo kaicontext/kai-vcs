@@ -46,7 +46,8 @@ artifacts; their logical object/index expectations are recorded instead.
 | F07 | Generated merge triples and pinned MIT Kai source; comments, wrappers, imports, directives, top-level edits, mode/rename/delete, binary and unsupported syntax | Inputs only; actual merge engine and outcomes deferred to P4 |
 
 The real-source corpus includes its license and pinned provenance in
-`tools/fixtures/corpus/`. Fixture completeness must be reviewed again as each
+`tools/fixtures/corpus/`; `.gitattributes` disables checkout line-ending conversion
+for this exact-byte corpus. Fixture completeness must be reviewed again as each
 runtime capability arrives; this is not a claim that all acceptance gates pass.
 
 ## Fault interfaces and executed checks
