@@ -316,12 +316,38 @@ is the next embedded-profile gap. Full extraction, failure harnesses and indepen
 review remain P0 work. Tests were local; remote CI/reviewer approval did not run.
 This increment is local work after the earlier GitHub push; no phase gate is closed.
 
+## Collaboration frontier profile increment — 2026-10-14
+
+Implemented the draft `kai/collaboration-frontier/v1` profile from SPEC §12.3.
+It binds workspace, epoch, generation, protocol, exact participant frontier and
+complete raw-path materialization inventory to a barrier. Per-entry frontiers
+cannot include excluded replicas or exceed the barrier. Protocol-defined log
+digests explicitly commit to namespace history, including renames/deletes; they
+remain claims, not validated operation histories. Shared subtrees are expanded at
+every path, with bounded reads, bytes and path work. Decimal-string counters
+preserve the entire u64 range in JSON. Existing native object vectors are unchanged.
+
+- **119 Rust tests passed**, including seven new frontier tests covering raw names,
+  shared subtrees, Gitlinks, context/participant mismatch, omitted/altered entries,
+  future/excluded frontiers, corruption, missing objects and resource limits.
+- **18 canonical profile cases** agree with the independent Python checker, now
+  included in CI. Earlier 21 interface and 14 evidence-profile cases still pass.
+- Workspace Clippy (warnings denied), formatting and whitespace checks passed.
+- Evidence: `checks/p0-frontier-tests.log`, `checks/p0-frontier-clippy.log`,
+  `checks/p0-frontier-reference.log`, `checks/p0-frontier-sources.sha256`.
+
+This is an experimental profile and explicit read-only verifier. Generic closure
+verification still accepts opaque manifests. Authentication, writer pause/drain,
+operation-log encoding/replay, namespace convergence, successor epochs, retired
+replicas and compaction proofs remain protocol work. No live collaboration or
+production publication gate is claimed. Tests were local; P0 remains open.
+
 ## Next P0 work
 
 1. Review the proposed capability/outcome contracts against storage and transport
    implementations; define remaining versioned request/session framing.
-2. Define the collaboration frontier manifest profile; review evidence-profile
-   completeness/applicability and signed-payload interoperability. Resolve remaining
+2. Review evidence/frontier profile completeness and protocol binding, evidence
+   applicability and signed-payload interoperability. Resolve remaining
    size/streaming and submap choices before freeze.
 3. Extend the independent reader to complete bundle/source extraction.
 4. Add F01–F07 generators with byte/kind manifests and deterministic seeds.

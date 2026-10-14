@@ -90,3 +90,8 @@ acknowledge a saved revision or certify power-loss durability. All P1–P10 rele
 gates, including the 60-day sole-primary pilot, remain outstanding.
 
 License: MIT, including the independent reader.
+
+The draft [collaboration frontier profile](docs/COLLABORATION-FRONTIER.md) binds
+replica and per-file frontiers to a complete materialized tree inventory. Its
+read-only verifier checks immutable declarations; live writer coordination and
+CRDT operation replay remain unimplemented.

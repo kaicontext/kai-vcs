@@ -22,6 +22,7 @@ jobs:
         run: |
           python tools/interface-reference/check.py
           python tools/interface-reference/profiles.py
+          python tools/interface-reference/frontier.py
       - name: Reproduce independent golden vectors
         shell: bash
         run: |

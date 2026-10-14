@@ -16,9 +16,11 @@ Both replica lists are strictly ID-sorted and disjoint. At least one participati
 replica is required. Sequence zero is valid. Every participant must be represented
 in the declared frontier manifest; that manifest must describe all participating
 files and namespace operations (renames/deletes), not just text operations.
-The versioned manifest is opaque in this increment: validating its completeness,
-authenticated acknowledgments, writer pause/epoch closure, operation draining,
-retired-replica/rejoin handling and successor epochs remain protocol work.
+The [collaboration frontier profile](COLLABORATION-FRONTIER.md) adds an explicit
+verifier for context, participant frontiers and complete materialized inventory.
+Generic object decoding still treats manifests as opaque. Authenticated
+acknowledgments, writer pause/epoch closure, operation draining, retired-replica/
+rejoin handling and successor epochs remain protocol work.
 Tree and manifest are required closure. A checkpoint linking this barrier must be
 barrier-consistent and have the same workspace and working tree. Staged content
 may differ. No timestamp chooses a frontier; later edits cannot mutate these bytes.
