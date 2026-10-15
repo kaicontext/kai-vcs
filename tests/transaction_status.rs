@@ -14,9 +14,16 @@ fn sample() -> (TransactionStatusRequest, TransactionStatusReply) {
 #[test]
 fn shared_corpus_matches_rust_and_roundtrips() {
     for row in corpus() {
+        let request =
+            TransactionStatusRequest::from_json(row["request"].as_str().unwrap().as_bytes());
+        assert_eq!(
+            request.is_ok(),
+            row["request_accepted"].as_bool().unwrap(),
+            "request validation: {}",
+            row["name"]
+        );
         let check = || -> Result<(), String> {
-            let r =
-                TransactionStatusRequest::from_json(row["request"].as_str().unwrap().as_bytes())?;
+            let r = request?;
             let p =
                 TransactionStatusReply::from_json(row["reply"].as_str().unwrap().as_bytes(), &r)?;
             assert_eq!(TransactionStatusRequest::from_json(&r.to_json()?)?, r);

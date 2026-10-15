@@ -47,6 +47,13 @@ if __name__ == '__main__':
     for row in rows:
         try:
             req = parse(row['request']); request(req)
+            request_accepted = True
+        except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
+            request_accepted = False
+        assert request_accepted == row['request_accepted'], f"request validation: {row['name']}"
+        try:
+            if not request_accepted:
+                raise ValueError('invalid request')
             reply(parse(row['reply']), req)
             accepted = True
         except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
