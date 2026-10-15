@@ -165,7 +165,10 @@ def replay(path, fast):
         require(header.get("version") == 2, "Expected an asciicast v2 recording.")
         previous = 0.0
         for line in stream:
-            timestamp, kind, text = json.loads(line)
+            event = json.loads(line)
+            require(isinstance(event, list) and len(event) == 3,
+                    "Malformed recording event; expected [time, kind, text].")
+            timestamp, kind, text = event
             if kind != "o":
                 continue
             if not fast:
