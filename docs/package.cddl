@@ -1,0 +1,7 @@
+; Load alongside schemas.cddl. Semantic constraints: PACKAGE-FORMAT.md.
+package-root = [native, 1..19]
+package-entry = [native, 1..65535, 23..67108887, 1..2]
+package-contents = {0: 1..2, 1: [* package-root], 2: [* package-entry],
+  3: [* package-entry], 4: [* bstr], 5: [* bstr], 6: 1}
+transfer-manifest = {0: bstr .size 16, 1: package-contents}
+backup-manifest = {0: bstr .size 16, 1: uint, 2: native, ?3: native, 4: package-contents}

@@ -1,0 +1,7 @@
+# Pinned byte corpus: checkout must not translate line endings on any host.
+tools/fixtures/corpus/* -text
+
+# Reproducible golden outputs remain versioned but collapse in GitHub diffs.
+tests/fixtures/objects.tsv linguist-generated=true
+tests/fixtures/attestation-payloads.tsv linguist-generated=true
+tests/fixtures/acceptance/manifest.json linguist-generated=true

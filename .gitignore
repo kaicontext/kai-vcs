@@ -1,2 +1,8 @@
 /target
 .DS_Store
+
+# Generated execution evidence belongs in CI artifacts.
+/docs/checks/
+/acceptance-fixtures/
+/recovery-artifacts/
+/fault-report.json

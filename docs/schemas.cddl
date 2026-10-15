@@ -1,0 +1,17 @@
+; Load package.cddl for types 16 and 19, control.cddl for types 17 and 18.
+; P0 implemented subset. See FORMAT.md for semantic/closure constraints.
+; Load view.cddl for type 6, metadata.cddl for types 9–11, git-envelope.cddl for type 12.
+; Load recovery.cddl alongside this file for object types 4, 5, 7, 8 and 15.
+native = [1, 1, bstr .size 32]
+git-sha1 = [0, 1, bstr .size 20]
+git-sha256 = [0, 2, bstr .size 32]
+entry = {0: bstr, 1: 1..5, 2: native / git-sha1 / git-sha256}
+tree = [* entry]
+identity = {0: bstr, 1: bstr, 2: int, 3: -1439..1439}
+revision = {
+  0: native, 1: [* native], 2: bstr .size 16,
+  3: identity, 4: identity, 5: bstr,
+  ? 6: [+ native], ? 7: native, ? 8: [+ [bstr, native]]
+}
+large-blob = {0: uint, 1: bstr .size 32, 2: [+ native]}
+; Blob/chunk payloads are raw bytes, not CBOR byte strings.

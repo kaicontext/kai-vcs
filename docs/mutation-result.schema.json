@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "mutation-result structural schema v1",
+  "$comment": "Cross-field invariants, byte limits, lexical ordering, NFC and u64 bounds are normative in INTERFACE-CONTRACT.md and validated by the Rust/Python checkers.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$"
+    },
+    "operation_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "outcome": {
+      "enum": [
+        "not_started",
+        "prepared",
+        "committed",
+        "committed_materialization_pending",
+        "conflicted",
+        "rejected",
+        "indeterminate"
+      ]
+    },
+    "exit_code": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "generation": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "generation": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "maxLength": 20
+          },
+          "target": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^k1:b3:[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "generation"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "recovery": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "external_receipts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "system": {
+            "type": "string",
+            "minLength": 1
+          },
+          "receipt_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state": {
+            "enum": [
+              "complete",
+              "pending",
+              "failed",
+              "unknown"
+            ]
+          }
+        },
+        "required": [
+          "system",
+          "receipt_id",
+          "state"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "interrupted": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema_version",
+    "request_id",
+    "outcome",
+    "exit_code",
+    "refs",
+    "recovery",
+    "external_receipts",
+    "interrupted"
+  ],
+  "additionalProperties": false
+}

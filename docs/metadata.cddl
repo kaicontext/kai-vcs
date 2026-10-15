@@ -1,0 +1,16 @@
+; Load alongside schemas.cddl. Semantic constraints: METADATA-FORMAT.md.
+metadata-labels = [* bstr]
+metadata-manifest = [bstr, native]
+evidence = {
+  0: native, 1: native, 2: 1..3, 3: 1..2, 4: [+ bstr], 5: bstr,
+  6: metadata-manifest, 7: metadata-manifest, 8: identity, 9: 1..3,
+  10: 1..6, 11: int, 12: int, 13: [* [bstr, native]],
+  14: {0: metadata-labels, 1: metadata-labels, 2: bstr, 3: bstr},
+  15: [* bstr], ?16: int
+}
+attestation = {0: bstr, 1: uint, 2: bstr, 3: 1..19, 4: native,
+               5: bstr, 6: bstr, 7: identity, 8: bstr, ?9: int, ?10: int}
+analysis-manifest = {0: native, 1: bstr, 2: bstr, 3: [1, bstr .size 32],
+  4: [1, bstr .size 32], 5: bstr, 6: 1..3, 7: metadata-labels,
+  8: metadata-labels, 9: metadata-labels, 10: metadata-labels,
+  11: [* native], 12: bstr}
