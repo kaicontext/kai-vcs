@@ -47,6 +47,9 @@ replicated request must name the exact expected receiver replication-policy ID.
 Unknown mandatory features never become an implicit downgrade. Caller-provided
 offers and request policy must come from authenticated sessions/trusted local config.
 
+The [list-refs contract](LIST-REFS.md) defines bounded namespace listings and
+generation-pinned continuation, preserving tombstones and all branch alternatives.
+
 ## Mutation result
 
 Required fields: schema_version=1, request_id, outcome, exit_code, refs, recovery,

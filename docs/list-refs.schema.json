@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "List-refs v1",
+  "$comment": "1 MiB limit and semantic rules including u64 range, native name grammar, ordering, namespaces, alternatives and request/snapshot binding are normative in LIST-REFS.md.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/request"
+    },
+    {
+      "$ref": "#/$defs/reply"
+    }
+  ],
+  "$defs": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "request_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "repository_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "namespace": {
+          "enum": [
+            "branches",
+            "tags",
+            "shelves",
+            "remotes"
+          ]
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "after": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "generation": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "repository_id",
+        "namespace",
+        "limit"
+      ],
+      "additionalProperties": false
+    },
+    "reply": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "request_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "repository_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "namespace": {
+          "enum": [
+            "branches",
+            "tags",
+            "shelves",
+            "remotes"
+          ]
+        },
+        "generation": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "after": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "refs": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "generation": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]*$"
+              },
+              "targets": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^k1:b3:[0-9a-f]{64}$"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "name",
+              "generation",
+              "targets"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "has_more": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "repository_id",
+        "namespace",
+        "generation",
+        "refs",
+        "has_more"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
