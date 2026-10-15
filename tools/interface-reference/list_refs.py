@@ -11,6 +11,9 @@ def parse(raw):
     return json.loads(raw, object_pairs_hook=unique_object)
 def name(value, namespace):
     require(isinstance(value, str))
+    # json.loads can preserve unpaired surrogate escapes; native names must
+    # encode as UTF-8 even when no ordering comparison will run.
+    value.encode("utf-8")
     require(unicodedata.normalize('NFC', value) == value)
     require(not any(unicodedata.category(c) == 'Cc' or c == '\\' for c in value))
     parts = value.split('/')
