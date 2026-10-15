@@ -6,6 +6,9 @@ gates. This is an experimental preservation kernel, not a replacement CLI yet.
 
 ## Implemented P0 increments
 
+- Canonical publication intents and checked request digests; see
+  [update-refs contract](docs/UPDATE-REFS.md). No ref mutation service yet.
+
 - Type/domain-separated BLAKE3 IDs and strict native framing.
 - Canonical deterministic CBOR trees with raw filenames, executable files,
   symlinks, directories, and algorithm-qualified Gitlinks.
