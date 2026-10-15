@@ -162,11 +162,14 @@ def replay(path, fast):
         first = next(stream, None)
         require(first is not None, "Empty recording; expected an asciicast v2 header.")
         header = json.loads(first)
-        require(header.get("version") == 2, "Expected an asciicast v2 recording.")
+        require(isinstance(header, dict) and header.get("version") == 2,
+                "Expected an asciicast v2 recording.")
         previous = 0.0
         for line in stream:
             event = json.loads(line)
-            require(isinstance(event, list) and len(event) == 3,
+            require(isinstance(event, list) and len(event) == 3
+                    and isinstance(event[0], (int, float)) and not isinstance(event[0], bool)
+                    and isinstance(event[1], str) and isinstance(event[2], str),
                     "Malformed recording event; expected [time, kind, text].")
             timestamp, kind, text = event
             if kind != "o":
