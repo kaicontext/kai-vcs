@@ -56,8 +56,9 @@ remaining P0 deliverables.
 | Contracts and profiles | Capability/outcome validation, evidence context and collaboration frontier verification | Protocol binding, authentication and runtime enforcement |
 | F01–F07 | 62 reproducible cases, 78 recorded artifacts, expected byte/kind/ID manifest | Runtime execution as later milestones become available |
 
-The transaction oracle explores 137,257 states through six actions involving
-save, undo, GC, retention and leases. It models intended semantics; it does not
+The transaction oracle explores 137,257 states: every sequence of up to six
+steps over seven actions (two saves, undo, GC, retention expiry, taking a lease,
+and a crashed preparer releasing it). It models intended semantics; it does not
 establish disk durability. See [FIXTURES.md](FIXTURES.md) for executed versus
 pending fixture checks and [RECOVERY-EXPORT.md](RECOVERY-EXPORT.md) for recovery
 scope and platform limitations. Detailed format contracts live in the individual
