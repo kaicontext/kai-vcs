@@ -20,6 +20,7 @@ jobs:
       - name: Conformance and reference model
         run: cargo +1.99.0 test --workspace --locked
       - name: Independent JSON contracts and tooling regressions
+        shell: bash
         env:
           RUSTUP_TOOLCHAIN: 1.99.0
         run: |
