@@ -118,5 +118,6 @@ not introduce hard revision→event→revision retention cycles.
 `Object::references` exposes reference classes. Required-closure verification
 traverses only required edges. A caller checking retained metadata must select
 and pin those roots explicitly. Verifying an audit operation alone does not
-certify that its expired undo views are available. View codecs, retention policy,
-and durable pins remain later P0/P1 work; no default policy expiry is implemented.
+certify that its expired undo views are available. The view codec is
+implemented (type 6, see [VIEW-FORMAT.md](VIEW-FORMAT.md)); retention policy and
+durable pins remain later P0/P1 work, and no default policy expiry is implemented.
