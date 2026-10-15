@@ -50,6 +50,10 @@ offers and request policy must come from authenticated sessions/trusted local co
 The [list-refs contract](LIST-REFS.md) defines bounded namespace listings and
 generation-pinned continuation, preserving tombstones and all branch alternatives.
 
+The [transaction-status contract](TRANSACTION-STATUS.md) binds outcome queries to
+the original transaction and digest, distinguishing recorded, unknown/expired and
+digest-mismatch states without authorizing automatic replay.
+
 ## Mutation result
 
 Required fields: schema_version=1, request_id, outcome, exit_code, refs, recovery,

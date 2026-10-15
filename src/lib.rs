@@ -57,3 +57,5 @@ pub mod collaboration_frontier;
 pub mod transfer_frame;
 
 pub mod list_refs;
+
+pub mod transaction_status;
