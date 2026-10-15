@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Transaction-status v1",
+  "$comment": "1 MiB bound, nested result semantics, status/payload rules and equality to the original query are normative in TRANSACTION-STATUS.md.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/request"
+    },
+    {
+      "$ref": "#/$defs/reply"
+    }
+  ],
+  "$defs": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "request_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "repository_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "transaction_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "request_digest": {
+          "type": "string",
+          "pattern": "^b3:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "repository_id",
+        "transaction_id",
+        "request_digest"
+      ],
+      "additionalProperties": false
+    },
+    "reply": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "request_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "repository_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "transaction_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "request_digest": {
+          "type": "string",
+          "pattern": "^b3:[0-9a-f]{64}$"
+        },
+        "status": {
+          "enum": [
+            "known",
+            "unknown",
+            "digest_mismatch"
+          ]
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "mutation-result.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unknown_reason": {
+          "enum": [
+            "missing",
+            "expired",
+            null
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "repository_id",
+        "transaction_id",
+        "request_digest",
+        "status"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
