@@ -26,6 +26,7 @@ jobs:
           python tools/interface-reference/check.py
           python tools/interface-reference/profiles.py
           python tools/interface-reference/frontier.py
+          python tools/interface-reference/list_refs.py
           python -m unittest discover -s tools/qualification -p "test_*.py"
       - name: Reproduce independent golden vectors
         shell: bash
