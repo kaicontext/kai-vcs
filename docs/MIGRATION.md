@@ -53,7 +53,7 @@ remaining P0 deliverables.
 | Failures and transactions (T013–T025) | In-memory transaction oracle, controlled write errors and 50 process-kill/restart boundaries | Durable storage/root transactions, concurrency and power-loss qualification |
 | Conflicts and staging (T034/T046) | Checkpoint working/staged conflicts and complete ordered alternatives/rename bindings | Production staging, resolution and restart behavior |
 | Retention (T040/T087–T091) | Explicit source versus retained metadata edges and reference model | Durable pins, expiry, GC barriers and operation recovery |
-| Contracts and profiles | Capability/outcome validation, evidence context and collaboration frontier verification | Protocol binding, authentication and runtime enforcement |
+| Contracts and profiles | Capability/outcome and [list-refs](LIST-REFS.md) validation, evidence context and collaboration frontier verification | Protocol binding, authentication and runtime enforcement |
 | F01–F07 | 62 reproducible cases, 78 recorded artifacts, expected byte/kind/ID manifest | Runtime execution as later milestones become available |
 
 The transaction oracle explores 137,257 states through six actions involving
