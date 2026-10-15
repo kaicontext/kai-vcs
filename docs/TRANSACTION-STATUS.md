@@ -17,8 +17,8 @@ original mutation's result `request_id` must equal this transaction ID.
 `request_digest` has spelling `b3:` followed by 64 lowercase hex digits. It is
 an algorithm-qualified digest of the original canonical mutation request, not an
 object ID or a digest of this status query. This module checks spelling and
-binding only; the update-refs canonicalization/digest algorithm remains a separate
-contract to implement before any mutation service is enabled.
+binding only; the draft [update-refs contract](UPDATE-REFS.md) defines canonicalization and
+digest computation. Durable mutation execution remains unimplemented.
 
 ## Reply
 

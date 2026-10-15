@@ -59,3 +59,5 @@ pub mod transfer_frame;
 pub mod list_refs;
 
 pub mod transaction_status;
+
+pub mod update_refs;
