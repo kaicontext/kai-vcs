@@ -30,6 +30,7 @@ jobs:
           python tools/interface-reference/transaction_status.py
           python tools/interface-reference/update_refs.py
           python tools/interface-reference/publication_receipt.py
+          python tools/interface-reference/receipt_status.py
           python -m unittest discover -s tools/qualification -p "test_*.py"
       - name: Reproduce independent golden vectors
         shell: bash
