@@ -61,3 +61,5 @@ pub mod list_refs;
 pub mod transaction_status;
 
 pub mod update_refs;
+
+pub mod publication_receipt;
