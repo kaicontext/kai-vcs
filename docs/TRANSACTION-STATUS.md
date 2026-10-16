@@ -5,7 +5,8 @@ payloads let a client query a previous mutation without repeating it. They are
 bounded to 1 MiB, require schema version 1, and reject unknown/duplicate fields.
 Optional fields may be omitted or null and are omitted when encoding absent.
 This defines an outcome lookup, not durable storage or a complete publication
-receipt (old/new refs, policy outcome and durability receipt remain separate work).
+receipt. The separate [publication receipt contract](PUBLICATION-RECEIPTS.md)
+checks old/new refs, policy outcome and durability; retrieval integration is pending.
 
 ## Request
 

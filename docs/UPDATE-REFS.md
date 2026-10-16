@@ -82,5 +82,6 @@ The Python encoder does not independently validate intents or implement BLAKE3.
 
 Try `cargo run --locked --offline --example update_refs`. It prints the request
 and status-query binding, then demonstrates rejection after changing the intent.
-No publication occurs. Complete publication receipts and durable execution remain
-separate increments.
+No publication occurs. The [publication receipt contract](PUBLICATION-RECEIPTS.md)
+checks committed responses. Durable execution and receipt retention remain separate
+increments.
