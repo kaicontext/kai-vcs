@@ -6,6 +6,9 @@ gates. This is an experimental preservation kernel, not a replacement CLI yet.
 
 ## Implemented P0 increments
 
+- Pure [publication preflight](docs/PUBLICATION-PREFLIGHT.md) checks exact old ref
+  states, prepares candidate views and rejects oversized responses before writes.
+
 - [Receipt-aware status lookup](docs/RECEIPT-STATUS.md) validates full committed
   receipts after a lost response and requires reconciliation after expiry.
 
