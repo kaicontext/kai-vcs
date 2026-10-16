@@ -63,9 +63,10 @@ use `from_json` or `validate` with the original request and session durability.
 
 After a lost response, the server must retain and return the same committed receipt
 for the original transaction/digest. This module defines what that receipt must
-contain. It does not yet add a receipt field to transaction-status v1, which remains
-an outcome-only lookup. Retrieval/retention, authenticated dispatch and persistent
-idempotency are still separate work, including the minimum 90-day retention rule.
+contain. The [v2 status envelope](RECEIPT-STATUS.md) carries and checks the receipt
+without changing outcome-only transaction-status v1. Backend retrieval/retention,
+authenticated dispatch and persistent idempotency are still separate work, including
+the minimum 90-day retention rule.
 No generic MutationResult conversion is offered: its singular ref target cannot
 represent every branch alternative without losing information.
 

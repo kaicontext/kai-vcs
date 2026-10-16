@@ -6,6 +6,9 @@ gates. This is an experimental preservation kernel, not a replacement CLI yet.
 
 ## Implemented P0 increments
 
+- [Receipt-aware status lookup](docs/RECEIPT-STATUS.md) validates full committed
+  receipts after a lost response and requires reconciliation after expiry.
+
 - Checked [committed publication receipts](docs/PUBLICATION-RECEIPTS.md) bind
   complete ref batches and agreed durability to the original request.
 
