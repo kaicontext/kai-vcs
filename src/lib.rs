@@ -65,3 +65,5 @@ pub mod update_refs;
 pub mod publication_receipt;
 
 pub mod receipt_status;
+
+pub mod publication_preflight;

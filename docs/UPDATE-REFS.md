@@ -84,4 +84,5 @@ Try `cargo run --locked --offline --example update_refs`. It prints the request
 and status-query binding, then demonstrates rejection after changing the intent.
 No publication occurs. The [publication receipt contract](PUBLICATION-RECEIPTS.md)
 checks committed responses. Durable execution and receipt retention remain separate
-increments.
+increments. The [preflight planner](PUBLICATION-PREFLIGHT.md) now checks the
+request against a supplied repository view and prepares a candidate without writes.
