@@ -114,7 +114,45 @@ fn original_request_is_revalidated_and_wire_is_bounded() {
         PublicationReceipt::from_json(&vec![b' '; 1024 * 1024 + 1], &request(), &expected())
             .is_err()
     );
-    let mut huge = r;
-    huge.refs[0].new_targets = vec!["x".repeat(1024 * 1024)];
-    assert!(huge.to_json(&request(), &expected()).is_err());
+}
+#[test]
+fn matching_receipt_exceeds_output_bound_only() {
+    let mut intent = request().intent;
+    intent.updates = (0..1000)
+        .map(|i| RefUpdate {
+            name: format!("branches/{i:04}"),
+            expected_generation: "0".into(),
+            expected_old_targets: vec![],
+            new_targets: vec![format!("k1:b3:{}", "a".repeat(64))],
+        })
+        .collect();
+    let padding = 1024 * 1024 - 128 - serde_json::to_vec(&intent).unwrap().len();
+    intent
+        .updates
+        .last_mut()
+        .unwrap()
+        .name
+        .push_str(&"x".repeat(padding));
+    let request = intent.into_request().unwrap();
+    request.validate().unwrap();
+    assert!(request.to_json().unwrap().len() <= 1024 * 1024);
+    let mut oversized = receipt();
+    oversized.request_digest = request.request_digest.clone();
+    oversized.refs = request
+        .intent
+        .updates
+        .iter()
+        .map(|u| PublishedRef {
+            name: u.name.clone(),
+            old_generation: "0".into(),
+            new_generation: "1".into(),
+            old_targets: u.expected_old_targets.clone(),
+            new_targets: u.new_targets.clone(),
+        })
+        .collect();
+    assert!(serde_json::to_vec(&oversized).unwrap().len() > 1024 * 1024);
+    assert_eq!(
+        oversized.to_json(&request, &expected()).unwrap_err(),
+        "publication receipt size limit"
+    );
 }
